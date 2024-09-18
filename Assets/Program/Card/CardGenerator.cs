@@ -12,7 +12,7 @@ public class CardGenerator : MonoBehaviour
     {
         Card card = Instantiate(_cardPrefab);
         card.CardSet(_cardData[Random.Range(0, _cardData.Length)]);
-
+        Debug.Log("Cardを配った");
         return card;
     }
 }
