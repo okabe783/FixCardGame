@@ -1,20 +1,10 @@
 using UnityEngine;
 
 //InGameのロジックを管理する
-public class InGameView : MonoBehaviour
+public class InGameLogic : MonoBehaviour
 {
     [SerializeField,Header("Cardを生成するクラス")] private CardGenerator _cardGenerator;
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
-
-    private void Start()
-    {
-        SetUp();
-    }
-
-    private void SetUp()
-    {
-        AddCardToHand();
-    }
 
     //手札を配布する
     private void AddCardToHand()
