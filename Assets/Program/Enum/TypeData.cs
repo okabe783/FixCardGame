@@ -13,7 +13,7 @@ public enum TurnResult
 }
 
 //InGame中のPhase管理
-public enum InGameFlow
+public enum InGamePhase
 {
     Mulligan,
     TurnStart,
@@ -30,4 +30,12 @@ public enum Area
     Deck,
     Grave,
     Hell,
+}
+
+public enum CardAction
+{
+    None,
+    Summon,
+    Discard,
+    Select,
 }
