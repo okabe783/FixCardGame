@@ -1,8 +1,9 @@
 using TMPro;
+using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHandler
 {
@@ -24,7 +25,21 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
         set => _isDraggable = value;
     }
 
-
+    private void Start()
+    {
+        InGameLogic.I.CurrentPhase.Subscribe(phase =>
+        {
+            if (phase == InGamePhase.Play)
+            {
+                _isDraggable = true;
+            }
+            else
+            {
+                _isDraggable = false;
+            }
+            
+        }).AddTo(this);
+    }
     public void CardSet(CardSO cardBase)
     {
         CardDataBase = cardBase;
@@ -34,20 +49,26 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
     
     public void OnPointerDown(PointerEventData eventData)
     {
-        _currentPosition = eventData.position;
+        if (_isDraggable)
+        {
+            _currentPosition = eventData.position;
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         //Cardの移動
-        float distance = Vector3.Distance(_currentPosition, eventData.position);
-        if (distance > _threshold)
+        if (_isDraggable)
         {
-            CardManager.I.PlayCard(this);
-        }
-        else
-        {
-            OnEndDragAction?.Invoke();
+            float distance = Vector3.Distance(_currentPosition, eventData.position);
+            if (distance > _threshold)
+            {
+                InGameLogic.I.PlayCard(this);
+            }
+            else
+            {
+                OnEndDragAction?.Invoke();
+            }
         }
     }
 
@@ -55,8 +76,7 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
     {
         if (_isDraggable)
         {
-            
+            transform.position = eventData.position;
         }
-        transform.position = eventData.position;
     }
 }

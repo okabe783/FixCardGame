@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using DG.Tweening;
 
 /// <summary>手札を管理するクラス</summary>
 public class PlayerHand : MonoBehaviour
@@ -8,9 +10,10 @@ public class PlayerHand : MonoBehaviour
     private List<Card> _cards = new();
 
     //Cardを登録
-    public void AddCard(Card card)
+    public async UniTask AddCard(Card card)
     {
         _cards.Add(card);
+        await card.transform.DOMove(transform.position, 0.5f);
         //子にする
         card.transform.SetParent(transform);
         ResetPosition();
