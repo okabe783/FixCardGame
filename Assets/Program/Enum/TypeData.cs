@@ -19,7 +19,7 @@ public enum InGamePhase
     TurnStart,
     Play,
     TurnEnd,
-    Wait,
+    Battle,
 }
 
 public enum Area

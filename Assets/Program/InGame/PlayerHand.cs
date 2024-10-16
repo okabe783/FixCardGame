@@ -14,7 +14,6 @@ public class PlayerHand : MonoBehaviour
     {
         _cards.Add(card);
         await card.transform.DOMove(transform.position, 0.5f);
-        //子にする
         card.transform.SetParent(transform);
         ResetPosition();
         //手札をソートをする関数を登録する

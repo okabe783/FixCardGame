@@ -13,8 +13,10 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
     [SerializeField] private float _floatingAmount = 0.1f;
     [SerializeField] private float _rotationFactor = 1;
 
+    private int _id;
     private Vector3 _currentPosition;
     private const float _threshold = 50f;
+    private EnemyAttribute _skill;
     public UnityAction OnEndDragAction; //Drag終了時に実行したい関数を登録
 
     //勝敗を決めるときに使う
@@ -23,6 +25,11 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
     public bool IsDraggable
     {
         set => _isDraggable = value;
+    }
+
+    public EnemyAttribute GetCardSkill()
+    {
+        return _skill;
     }
 
     private void Start()
@@ -40,11 +47,24 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
             
         }).AddTo(this);
     }
-    public void CardSet(CardSO cardBase)
+    public void CardSet(int cardID)
     {
+        CardSO cardBase =  Resources.Load<CardSO>("SOPrefabs/Card/Card" + cardID);
         CardDataBase = cardBase;
         _icon.sprite = cardBase.Icon;
         _descriptionText.text = cardBase.Description;
+        _id = cardBase.ID;
+        
+        //属性をCardSkillから取得して保持
+        if (_id < CardSkill.AllAttributes.Count)
+        {
+            _skill = CardSkill.AllAttributes[_id - 1];
+            Debug.Log($"Card ID: {_id}, Enemy Attribute: {_skill}");
+        }
+        else
+        {
+            Debug.LogError("cardIDがAllAttributesの範囲外です");
+        }
     }
     
     public void OnPointerDown(PointerEventData eventData)
