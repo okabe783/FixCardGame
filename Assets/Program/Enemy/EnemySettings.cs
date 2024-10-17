@@ -7,4 +7,5 @@ public class EnemySettings : ScriptableObject
     public int EnemyID;
     public int Hp;
     public Sprite Sprite;
+    public string EffectName;
 }

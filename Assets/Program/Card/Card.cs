@@ -13,6 +13,8 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
     [SerializeField] private float _floatingAmount = 0.1f;
     [SerializeField] private float _rotationFactor = 1;
 
+    private int _power;
+    private string _effectName;
     private int _id;
     private Vector3 _currentPosition;
     private const float _threshold = 50f;
@@ -30,6 +32,16 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
     public EnemyAttribute GetCardSkill()
     {
         return _skill;
+    }
+
+    public int GetCardPower()
+    {
+        return _power;
+    }
+
+    public string GetEffectName()
+    {
+        return _effectName;
     }
 
     private void Start()
@@ -54,6 +66,8 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
         _icon.sprite = cardBase.Icon;
         _descriptionText.text = cardBase.Description;
         _id = cardBase.ID;
+        _power = cardBase.CardPower;
+        _effectName = cardBase.EffectName;
         
         //属性をCardSkillから取得して保持
         if (_id < CardSkill.AllAttributes.Count)

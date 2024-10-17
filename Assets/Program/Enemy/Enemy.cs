@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Image _icon;
     private EnemySettings _enemyBase;
     private int _currentHp;
+    private string _effectName;
     private int _id;
     private EnemyAttribute _attribute;
 
@@ -13,7 +15,24 @@ public class Enemy : MonoBehaviour
     {
         return _attribute;
     }
-    
+
+    public string GetEffectName()
+    {
+        return _effectName; 
+    }
+
+    public void SetCurrentHp(int hp)
+    {
+        _currentHp = hp;
+        Debug.Log(_currentHp);
+    }
+
+    private void Start()
+    {
+        SetEnemy(1);
+        Debug.Log(transform.position);
+    }
+
     //Enemyの情報をセット
     public void SetEnemy(int enemyID)
     {
@@ -22,6 +41,7 @@ public class Enemy : MonoBehaviour
         _enemyBase = enemyBase;
         _currentHp = enemyBase.Hp;
         _id = enemyBase.EnemyID;
+        _effectName = enemyBase.EffectName;
         _attribute = enemyBase.EnemyAttribute;
     }
 }
