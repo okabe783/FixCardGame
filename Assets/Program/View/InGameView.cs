@@ -17,7 +17,7 @@ public class InGameView : MonoBehaviour
         //手札を配る
         await InGameLogic.I.AddCardToHand();
         //StartPanelをアクティブにする
-        await InGameLogic.I.ActivePhasePanel("StartPhase", 1000);
+        await InGameLogic.I.ActivePhasePanel("StartPhase");
         //Phaseのスタート
         InGameLogic.I.ChangePhaseState(InGamePhase.TurnStart);
     }

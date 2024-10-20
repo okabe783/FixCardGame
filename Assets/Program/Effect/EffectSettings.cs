@@ -55,8 +55,9 @@ public class EffectSettings : MonoBehaviour
                                  * effect.RightCurve.Evaluate(progress) * effect.Magnification;
             float currentPositionY = currentPosition2D.y += effect.UpCurve.Evaluate(progress) * effect.Magnification;
             effect.transform.position = new Vector3(currentPosition2D.x, currentPositionY,startPosition.z);
-            
+            Debug.Log("移動中");
             await UniTask.Yield(PlayerLoopTiming.Update);
         }
+        Destroy(gameObject);
     }
 }

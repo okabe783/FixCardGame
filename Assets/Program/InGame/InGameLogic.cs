@@ -13,6 +13,9 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     [SerializeField, Header("手札の位置")] private PlayerHand _homeTransform;
     [SerializeField, Header("置きたい場所")] private GameObject _targetTransform;
 
+    [SerializeField] private GameObject _startPos;
+    [SerializeField] private GameObject _targetPos;
+
     // Eventの発行
     private ReactiveProperty<InGamePhase> _currentPhase = new();
 
@@ -20,6 +23,8 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
     public async UniTask PlayCard(Card card)
     {
+        //ToDo:Panelをセットする
+        //ToDo:Viewに通知してViewがこの処理を呼び出す
         // Cardをターゲットにセットする
         await card.transform.DOMove(_targetTransform.transform.position, 0.5f);
         _homeTransform.RemoveCard(card);
@@ -61,7 +66,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         }
     }
 
-    public async UniTask ActivePhasePanel(string panelName, int delayTime)
+    public async UniTask ActivePhasePanel(string panelName)
     {
         PhasePanel panelPrefab = Resources.Load<PhasePanel>("Panel/CurrentPhasePanel");
 
@@ -73,11 +78,10 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
         PhasePanel panelInstance = Instantiate(panelPrefab, transform);
         panelInstance.UpdatePanelText(panelName);
-        await UniTask.Delay(delayTime);
+        await UniTask.Delay(1000);
         Destroy(panelInstance.gameObject);
     }
-
-    //ToDo:Effectの座標をなんとかする
+    
     private async UniTask CardBattle(Card card)
     {
         Enemy enemy = FindAnyObjectByType<Enemy>();
@@ -102,19 +106,19 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         }
         else
         {
-            Debug.Log("Damageが跳ね返された");
             var effectPrefab = Resources.Load<EffectSettings>("Motion/" + enemy.GetEffectName());
             if (effectPrefab == null)
             {
                 Debug.LogError("Resourcesが読み込めません");
             }
-            EffectSettings effectInstance = Instantiate(effectPrefab,enemy.transform.position,Quaternion.identity);
-            Debug.Log(effectInstance.transform.position);
-            await effectInstance.MoveEffectToTarget(effectInstance,card.transform.position);
+            EffectSettings effectInstance = Instantiate(effectPrefab,_startPos.transform.position,Quaternion.identity);
+            await effectInstance.MoveEffectToTarget(effectInstance,_targetPos.transform.position);
             Destroy(effectInstance.gameObject);
         }
 
         Destroy(card.gameObject);
         ChangePhaseState(InGamePhase.Battle);
     }
+    //ToDo:EndPhasePanelを出すPhaseを開始する関数を作る
+    
 }

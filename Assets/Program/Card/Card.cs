@@ -73,7 +73,7 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
         if (_id < CardSkill.AllAttributes.Count)
         {
             _skill = CardSkill.AllAttributes[_id - 1];
-            Debug.Log($"Card ID: {_id}, Enemy Attribute: {_skill}");
+            //Debug.Log($"Card ID: {_id}, Enemy Attribute: {_skill}");
         }
         else
         {
@@ -97,7 +97,8 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
             float distance = Vector3.Distance(_currentPosition, eventData.position);
             if (distance > _threshold)
             {
-                InGameLogic.I.PlayCard(this);
+                
+                 InGameLogic.I.PlayCard(this);
             }
             else
             {
