@@ -28,7 +28,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         // Cardをターゲットにセットする
         await card.transform.DOMove(_targetTransform.transform.position, 0.5f);
         _homeTransform.RemoveCard(card);
-        ChangePhaseState(_currentPhase.Value);
+        await StateMachine.GetInstance().ChangeState("battle","battle");
         await CardBattle(card);
     }
 
@@ -40,29 +40,6 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
             Card createCard = _cardGenerator.SpawnCard();
             // 生成したカードを手札に加える
             await _playerHand.AddCard(createCard);
-        }
-    }
-
-    // Phaseを変更する
-    public void ChangePhaseState(InGamePhase phase)
-    {
-        switch (phase)
-        {
-            case InGamePhase.Mulligan:
-                CurrentPhase.Value = InGamePhase.TurnStart;
-                break;
-            case InGamePhase.TurnStart:
-                CurrentPhase.Value = InGamePhase.Play;
-                break;
-            case InGamePhase.Play:
-                CurrentPhase.Value = InGamePhase.Battle;
-                break;
-            case InGamePhase.Battle:
-                CurrentPhase.Value = InGamePhase.TurnEnd;
-                break;
-            case InGamePhase.TurnEnd:
-                CurrentPhase.Value = InGamePhase.TurnStart;
-                break;
         }
     }
 
@@ -82,7 +59,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         Destroy(panelInstance.gameObject);
     }
     
-    private async UniTask CardBattle(Card card)
+    public async UniTask CardBattle(Card card)
     {
         Enemy enemy = FindAnyObjectByType<Enemy>();
 
@@ -115,10 +92,8 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
             await effectInstance.MoveEffectToTarget(effectInstance,_targetPos.transform.position);
             Destroy(effectInstance.gameObject);
         }
-
+        
+        await StateMachine.GetInstance().ChangeState("turnEnd","turnEnd");
         Destroy(card.gameObject);
-        ChangePhaseState(InGamePhase.Battle);
     }
-    //ToDo:EndPhasePanelを出すPhaseを開始する関数を作る
-    
 }

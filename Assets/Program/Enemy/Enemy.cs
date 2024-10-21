@@ -30,7 +30,6 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         SetEnemy(1);
-        Debug.Log(transform.position);
     }
 
     //Enemyの情報をセット

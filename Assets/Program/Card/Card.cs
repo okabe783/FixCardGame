@@ -3,15 +3,17 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Cysharp.Threading.Tasks;
 using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHandler
+public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField, Header("Image")] private Image _icon;
     [SerializeField, Header("説明")]　private TextMeshProUGUI _descriptionText;
+
     [SerializeField] private bool _isDraggable;
-    [SerializeField] private float _floatingAmount = 0.1f;
-    [SerializeField] private float _rotationFactor = 1;
+    //[SerializeField] private float _floatingAmount = 0.1f;
+    //[SerializeField] private float _rotationFactor = 1;
 
     private int _power;
     private string _effectName;
@@ -23,11 +25,6 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
 
     //勝敗を決めるときに使う
     public CardSO CardDataBase { get; private set; }
-
-    public bool IsDraggable
-    {
-        set => _isDraggable = value;
-    }
 
     public EnemyAttribute GetCardSkill()
     {
@@ -56,19 +53,31 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
             {
                 _isDraggable = false;
             }
-            
         }).AddTo(this);
     }
+
+    private void Update()
+    {
+        if (StateMachine.GetInstance().GetCurrentState() is PlayPhase)
+        {
+            _isDraggable = true;
+        }
+        else
+        {
+            _isDraggable = false;
+        }
+    }
+
     public void CardSet(int cardID)
     {
-        CardSO cardBase =  Resources.Load<CardSO>("SOPrefabs/Card/Card" + cardID);
+        CardSO cardBase = Resources.Load<CardSO>("SOPrefabs/Card/Card" + cardID);
         CardDataBase = cardBase;
         _icon.sprite = cardBase.Icon;
         _descriptionText.text = cardBase.Description;
         _id = cardBase.ID;
         _power = cardBase.CardPower;
         _effectName = cardBase.EffectName;
-        
+
         //属性をCardSkillから取得して保持
         if (_id < CardSkill.AllAttributes.Count)
         {
@@ -80,7 +89,7 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
             Debug.LogError("cardIDがAllAttributesの範囲外です");
         }
     }
-    
+
     public void OnPointerDown(PointerEventData eventData)
     {
         if (_isDraggable)
@@ -97,8 +106,7 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDragHan
             float distance = Vector3.Distance(_currentPosition, eventData.position);
             if (distance > _threshold)
             {
-                
-                 InGameLogic.I.PlayCard(this);
+                InGameLogic.I.PlayCard(this).Forget();
             }
             else
             {

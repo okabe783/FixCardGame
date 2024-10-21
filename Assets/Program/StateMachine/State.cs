@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 
 public abstract class State
 {
+   //ToDo:PanelのSetUpをViewに任せる
    public virtual async UniTask Enter(string panelName)
    {
       await ShowPanel(panelName);
