@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 public class MulliganPhase : State
 {
@@ -10,12 +9,11 @@ public class MulliganPhase : State
         _view = view;
     }
 
-    public override async UniTask Enter(string panelName)
+    public override async UniTask Enter()
     {
-        await base.Enter(panelName); // パネルの表示
         await _view.GameMainSetUp();
         //Mulliganの処理
-        await StateMachine.GetInstance().ChangeState("play", "Main");
+        await StateMachine.GetInstance().ChangeState("play");
     }
 
     public override void OnUpdate()
@@ -24,7 +22,6 @@ public class MulliganPhase : State
 
     public override void Exit()
     {
-        //次のStateに行く
-        Debug.Log("MulliganPhaseを抜けた");
+        
     }
 }

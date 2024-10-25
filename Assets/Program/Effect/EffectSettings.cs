@@ -34,7 +34,14 @@ public class EffectSettings : MonoBehaviour
     public float Magnification => _magnification;
     public float Duration => _duration;
     public List<SESettings> SESettingsList => _seSettings;
-
+    
+    [SerializeField] private int _destroyTime;
+    
+    public async UniTask SetParticle()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(_destroyTime));
+        Destroy(gameObject);
+    }
     
     public async UniTask MoveEffectToTarget(EffectSettings effect,Vector2 targetPosition)
     {
@@ -55,7 +62,6 @@ public class EffectSettings : MonoBehaviour
                                  * effect.RightCurve.Evaluate(progress) * effect.Magnification;
             float currentPositionY = currentPosition2D.y += effect.UpCurve.Evaluate(progress) * effect.Magnification;
             effect.transform.position = new Vector3(currentPosition2D.x, currentPositionY,startPosition.z);
-            Debug.Log("移動中");
             await UniTask.Yield(PlayerLoopTiming.Update);
         }
         Destroy(gameObject);

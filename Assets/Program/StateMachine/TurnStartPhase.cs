@@ -5,10 +5,9 @@ public class TurnStartPhase : State
 {
     private readonly InGameView _view;
 
-    public override async UniTask Enter(string panelName)
+    public override async UniTask Enter()
     {
-        await　base.Enter(panelName);
-        await StateMachine.GetInstance().ChangeState("play", "Main");
+        await StateMachine.GetInstance().ChangeState("play");
     }
 
     public TurnStartPhase(InGameView view)
@@ -23,6 +22,6 @@ public class TurnStartPhase : State
 
     public override void Exit()
     {
-        Debug.Log("StartPhaseを抜けた");
+        
     }
 }

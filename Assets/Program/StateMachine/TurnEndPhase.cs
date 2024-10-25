@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class TurnEndPhase :State
 {
-    public override async UniTask Enter(string PanelName)
+    public override async UniTask Enter()
     {
         //敵の攻撃処理
-        await base.Enter(PanelName);
-        await StateMachine.GetInstance().ChangeState("turnStart", "Start");
+        await StateMachine.GetInstance().ChangeState("turnStart");
     }
 
     public override void OnUpdate()
@@ -16,8 +15,8 @@ public class TurnEndPhase :State
     }
 
     
-    public override async void Exit()
+    public override void Exit()
     {
-        Debug.Log("EndPhaseを抜けた");
+        
     }
 }

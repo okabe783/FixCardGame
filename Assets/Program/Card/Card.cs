@@ -12,16 +12,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     [SerializeField, Header("説明")]　private TextMeshProUGUI _descriptionText;
 
     [SerializeField] private bool _isDraggable;
-    //[SerializeField] private float _floatingAmount = 0.1f;
-    //[SerializeField] private float _rotationFactor = 1;
 
     private int _power;
-    private string _effectName;
+    private string _attackEffectName;
+    private string _summonEffectName;
     private int _id;
-    private Vector3 _currentPosition;
+    private Vector2 _currentPosition;
     private const float _threshold = 50f;
     private EnemyAttribute _skill;
-    public UnityAction OnEndDragAction; //Drag終了時に実行したい関数を登録
+    public UnityAction OnEndDragAction;
 
     //勝敗を決めるときに使う
     public CardSO CardDataBase { get; private set; }
@@ -36,9 +35,19 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         return _power;
     }
 
-    public string GetEffectName()
+    public string GetAttackEffectName()
     {
-        return _effectName;
+        return _attackEffectName;
+    }
+
+    public string GetSummonEffectName()
+    {
+        return _summonEffectName;
+    }
+
+    public Image GetIcon()
+    {
+        return _icon;
     }
 
     private void Start()
@@ -76,13 +85,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         _descriptionText.text = cardBase.Description;
         _id = cardBase.ID;
         _power = cardBase.CardPower;
-        _effectName = cardBase.EffectName;
+        _attackEffectName = cardBase.AttackEffectName;
+        _summonEffectName = cardBase.SummonEffectName;
 
         //属性をCardSkillから取得して保持
         if (_id < CardSkill.AllAttributes.Count)
         {
             _skill = CardSkill.AllAttributes[_id - 1];
-            //Debug.Log($"Card ID: {_id}, Enemy Attribute: {_skill}");
         }
         else
         {
@@ -103,7 +112,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         //Cardの移動
         if (_isDraggable)
         {
-            float distance = Vector3.Distance(_currentPosition, eventData.position);
+            float distance = Vector2.Distance(_currentPosition, eventData.position);
             if (distance > _threshold)
             {
                 InGameLogic.I.PlayCard(this).Forget();
@@ -119,7 +128,14 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     {
         if (_isDraggable)
         {
-            transform.position = eventData.position;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                (RectTransform)transform.parent, // 親のRectTransform
+                eventData.position, // ドラッグ時のスクリーン座標
+                eventData.pressEventCamera, // イベントカメラ
+                out Vector2 localPoint); // ローカル座標に変換された結果を格納
+
+            // ローカル座標に変換された座標を使ってカードの位置を更新
+            transform.localPosition = localPoint;
         }
     }
 }

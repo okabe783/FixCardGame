@@ -31,7 +31,7 @@ public class PlayerHand : MonoBehaviour
         for (int i = 0; i < _cards.Count; i++)
         {
             float center = (_cards.Count - 1) / 2.0f;
-            float interval = 110.0f;
+            float interval = 15.0f;
             float x = (i - center) * interval;
             _cards[i].transform.localPosition = new Vector3(x, 0, 0);
         }

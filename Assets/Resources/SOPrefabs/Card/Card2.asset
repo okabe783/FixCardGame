@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc9f8b9050ba7774e8abbe74bc4c84b0, type: 3}
   m_Name: Card2
   m_EditorClassIdentifier: 
-  EffectName: FireBall
+  AttackEffectName: eff_attack_01
+  SummonEffectName: eff_summon_01
   CardPower: 0
   ID: 2
   Icon: {fileID: 21300000, guid: 5ed52b2ea79372b41a14d2875464b383, type: 3}

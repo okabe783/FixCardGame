@@ -38,7 +38,7 @@ public class StateMachine : MonoBehaviour
 
     private async UniTask Start()
     {
-        await ChangeState("mulligan", "mulligan");
+        await ChangeState("mulligan");
     }
 
     // 状態を登録
@@ -48,7 +48,7 @@ public class StateMachine : MonoBehaviour
     }
 
     //Stateの登録
-    public async UniTask ChangeState(string key, string panelName)
+    public async UniTask ChangeState(string key)
     {
         if (_currentState != null)
         {
@@ -58,7 +58,7 @@ public class StateMachine : MonoBehaviour
         if (_states.ContainsKey(key))
         {
             _currentState = _states[key];
-            await _currentState.Enter(panelName);
+            await _currentState.Enter();
         }
         else
         {

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BattlePhase : State
 {
-    public override async UniTask Enter(string PanelName)
+    public override async UniTask Enter()
     {
-        await base.Enter(PanelName);
+        
     }
 
     public override void OnUpdate()
