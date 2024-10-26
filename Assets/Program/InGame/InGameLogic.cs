@@ -10,8 +10,6 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
     [SerializeField, Header("手札の位置")] private PlayerHand _homeTransform;
     [SerializeField, Header("置きたい場所")] private GameObject _targetTransform;
-    [SerializeField] private GameObject _startPos;
-    [SerializeField] private GameObject _targetPos;
     [SerializeField] private InGameView _inGameView;
 
     // Eventの発行
@@ -24,7 +22,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         card.GetIcon().enabled = false;
         // Cardをターゲットにセットする
         await card.transform.DOMove(_targetTransform.transform.position, 0.1f);
-        await _inGameView.ShowEffect(card.GetSummonEffectName(),_startPos.transform.position);
+        await _inGameView.ShowEffect(card.GetSummonEffectName(),_targetTransform.transform.position);
         card.GetIcon().enabled = true;
         _homeTransform.RemoveCard(card);
         await StateMachine.GetInstance().ChangeState("battle");
@@ -62,7 +60,9 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
             //Canseltokenの使用
             EffectSettings effectInstance = Instantiate(effectPrefab,card.transform.position,Quaternion.identity);
             await effectInstance.MoveEffectToTarget(effectInstance,enemy.transform.position);
-            Destroy(effectInstance.gameObject);
+            var hitEffectPrefab = Resources.Load<EffectSettings>("Motion/" + effectPrefab.OnHitEffect);
+            EffectSettings hitEffectInstance = Instantiate(hitEffectPrefab,enemy.transform.position,Quaternion.identity);
+            await hitEffectInstance.SetParticle(hitEffectInstance);
         }
         else
         {
@@ -74,6 +74,9 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
             }
             EffectSettings effectInstance = Instantiate(effectPrefab,enemy.transform.position,Quaternion.identity);
             await effectInstance.MoveEffectToTarget(effectInstance,card.transform.position);
+            var hitEffectPrefab = Resources.Load<EffectSettings>("Motion/" + effectPrefab.OnHitEffect);
+            var hitEffectInstance = Instantiate(hitEffectPrefab,card.transform.position,Quaternion.identity);
+            await hitEffectInstance.SetParticle(hitEffectInstance);
         }
         
         await StateMachine.GetInstance().ChangeState("turnEnd");

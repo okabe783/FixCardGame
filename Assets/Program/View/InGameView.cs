@@ -43,6 +43,6 @@ public class InGameView : MonoBehaviour
             return;
         }
         EffectSettings effectInstance = Instantiate(effectPrefab,position,Quaternion.identity);
-        await effectInstance.SetParticle();
+        await effectInstance.SetParticle(effectInstance);
     }
 }

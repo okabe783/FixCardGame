@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-
 public class EffectSettings : MonoBehaviour
 {
     [Serializable]
@@ -37,10 +36,10 @@ public class EffectSettings : MonoBehaviour
     
     [SerializeField] private int _destroyTime;
     
-    public async UniTask SetParticle()
+    public async UniTask SetParticle(EffectSettings effectInstance)
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_destroyTime));
-        Destroy(gameObject);
+        Destroy(effectInstance.gameObject);
     }
     
     public async UniTask MoveEffectToTarget(EffectSettings effect,Vector2 targetPosition)
@@ -64,6 +63,7 @@ public class EffectSettings : MonoBehaviour
             effect.transform.position = new Vector3(currentPosition2D.x, currentPositionY,startPosition.z);
             await UniTask.Yield(PlayerLoopTiming.Update);
         }
+        
         Destroy(gameObject);
     }
 }

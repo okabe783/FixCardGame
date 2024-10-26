@@ -9718,7 +9718,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _magnification: 0
   _seSettings: []
-  _onHitEffect: 
+  _onHitEffect: eff_hit_001
   _destroyTime: 0
 --- !u!1 &8169073477478182319
 GameObject:
