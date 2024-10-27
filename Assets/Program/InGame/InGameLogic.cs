@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 // InGameのロジックを管理する
 public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 {
+    [SerializeField] private Player _player;
     [SerializeField, Header("Cardを生成するクラス")] private CardGenerator _cardGenerator;
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
     [SerializeField, Header("手札の位置")] private PlayerHand _homeTransform;
@@ -13,9 +14,11 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     [SerializeField] private InGameView _inGameView;
 
     // Eventの発行
-    private ReactiveProperty<InGamePhase> _currentPhase = new();
+    private readonly ReactiveProperty<InGamePhase> _currentPhase = new();
 
     public IReactiveProperty<InGamePhase> CurrentPhase => _currentPhase;
+
+    public PlayerHand PlayerHand => _playerHand;
 
     public async UniTask PlayCard(Card card)
     {
@@ -24,7 +27,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         await card.transform.DOMove(_targetTransform.transform.position, 0.1f);
         await _inGameView.ShowEffect(card.GetSummonEffectName(),_targetTransform.transform.position);
         card.GetIcon().enabled = true;
-        _homeTransform.RemoveCard(card);
+        PlayerHand.RemoveCard(card);
         await StateMachine.GetInstance().ChangeState("battle");
         await CardBattle(card);
     }
@@ -35,7 +38,6 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         for (int i = 0; i < 3; i++)
         {
             Card createCard = _cardGenerator.SpawnCard();
-            // 生成したカードを手札に加える
             await _playerHand.AddCard(createCard);
         }
     }
@@ -56,8 +58,9 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         if ((enemyAttribute & cardAttribute) != 0)
         {
             enemy.SetCurrentHp(card.GetCardPower());
+            _inGameView.ChangeHPBar(enemy.GetCurrentHp(), 0);
+            //Effectの設定
             EffectSettings effectPrefab = Resources.Load<EffectSettings>("Motion/" + card.GetAttackEffectName());
-            //Canseltokenの使用
             EffectSettings effectInstance = Instantiate(effectPrefab,card.transform.position,Quaternion.identity);
             await effectInstance.MoveEffectToTarget(effectInstance,enemy.transform.position);
             var hitEffectPrefab = Resources.Load<EffectSettings>("Motion/" + effectPrefab.OnHitEffect);
@@ -72,6 +75,10 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
                 Debug.LogError("Resourcesが読み込めません");
                 return;
             }
+            
+            //PlayerのHPを減らす
+            _player.ChangeHealth(1);
+            _inGameView.ChangeHPBar(_player.GetHP(), 1);
             EffectSettings effectInstance = Instantiate(effectPrefab,enemy.transform.position,Quaternion.identity);
             await effectInstance.MoveEffectToTarget(effectInstance,card.transform.position);
             var hitEffectPrefab = Resources.Load<EffectSettings>("Motion/" + effectPrefab.OnHitEffect);

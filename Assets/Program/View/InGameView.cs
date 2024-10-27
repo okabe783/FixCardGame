@@ -1,23 +1,21 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-/// <summary>
-/// Viewの管理
-/// エフェクトやボイスなどを管理する
-/// </summary>
 public class InGameView : MonoBehaviour
 {
     // ゲームのメインセットアップ
     public async UniTask GameMainSetUp()
     {
-        // ToDo:敵のAnimationを実装
-        // 手札を配る
-        await InGameLogic.I.AddCardToHand();
-        // StartPanelをアクティブにする
+        await DrawCard();
         await ShowActivePanel("StartPhase");
     }
     
-    //Panelを表示する
+    public async UniTask DrawCard()
+    {
+        InGameLogic.I.PlayerHand.ResetCard();
+        await InGameLogic.I.AddCardToHand();
+    }
+    
     public async UniTask ShowActivePanel(string panelName)
     {
         PhasePanel panelPrefab = Resources.Load<PhasePanel>("Panel/CurrentPhasePanel");
@@ -44,5 +42,23 @@ public class InGameView : MonoBehaviour
         }
         EffectSettings effectInstance = Instantiate(effectPrefab,position,Quaternion.identity);
         await effectInstance.SetParticle(effectInstance);
+    }
+
+    public void ChangeHPBar(int hp,int playerIndex)
+    {
+        var hpSettings = FindObjectOfType<HPSettings>();
+
+        switch (playerIndex)
+        {
+            case 0:
+                hpSettings.UpdateEnemyHPText(hp);
+                break;
+            case 1:
+                hpSettings.UpdatePlayerHPText(hp);
+                break;
+            default:
+                Debug.LogError("無効です");
+                break;
+        }
     }
 }

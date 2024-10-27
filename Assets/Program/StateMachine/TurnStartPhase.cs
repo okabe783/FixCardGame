@@ -6,6 +6,7 @@ public class TurnStartPhase : State
 
     public override async UniTask Enter()
     {
+        await _view.DrawCard();
         await StateMachine.GetInstance().ChangeState("play");
     }
 
@@ -16,7 +17,7 @@ public class TurnStartPhase : State
 
     public override void OnUpdate()
     {
-        //リフレッシュの処理
+        
     }
 
     public override void Exit()

@@ -20,10 +20,14 @@ public class Enemy : MonoBehaviour
         return _effectName; 
     }
 
+    public int GetCurrentHp()
+    {
+        return _currentHp;
+    }
+
     public void SetCurrentHp(int hp)
     {
-        _currentHp = hp;
-        Debug.Log(_currentHp);
+        _currentHp -= hp;
     }
 
     private void Start()
