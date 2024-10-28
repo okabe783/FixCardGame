@@ -12,7 +12,8 @@ public class MulliganPhase : State
     public override async UniTask Enter()
     {
         await _view.GameMainSetUp();
-        //Mulliganの処理
+        // ToDo:Mulliganの処理
+        //OnUpdateをメソッド名を変更してそこに書く
         await StateMachine.GetInstance().ChangeState("play");
     }
 

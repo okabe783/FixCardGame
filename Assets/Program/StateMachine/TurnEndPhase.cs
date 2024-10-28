@@ -1,11 +1,18 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 public class TurnEndPhase :State
 {
+    private readonly InGameView _view;
+
+    public TurnEndPhase (InGameView view)
+    {
+        _view = view;
+    }
+    
     public override async UniTask Enter()
     {
-        //敵の攻撃処理
+        // ToDo:敵の攻撃処理
+        await _view.ShowActivePanel("EndPhase");
         await StateMachine.GetInstance().ChangeState("turnStart");
     }
 

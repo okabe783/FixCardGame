@@ -5,8 +5,8 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     [SerializeField] private InGameView _inGameView;
-    private State _currentState; // 現在のState
-    private readonly Dictionary<string, State> _states = new(); // 全Phaseを管理する
+    private State _currentState; 
+    private readonly Dictionary<string, State> _states = new(); 
 
     private static StateMachine _stateMachine;
 
@@ -28,12 +28,11 @@ public class StateMachine : MonoBehaviour
 
     private void Awake()
     {
-        //ToDo:全てにViewを登録
         AddState("mulligan", new MulliganPhase(_inGameView));
         AddState("turnStart", new TurnStartPhase(_inGameView));
         AddState("play", new PlayPhase());
         AddState("battle", new BattlePhase());
-        AddState("turnEnd", new TurnEndPhase());
+        AddState("turnEnd", new TurnEndPhase(_inGameView));
     }
 
     private async UniTask Start()
@@ -52,12 +51,12 @@ public class StateMachine : MonoBehaviour
     {
         if (_currentState != null)
         {
-            _currentState.Exit(); // 現在の状態を終了
+            _currentState.Exit();
         }
 
-        if (_states.ContainsKey(key))
+        if (_states.TryGetValue(key, out var state))
         {
-            _currentState = _states[key];
+            _currentState = state;
             await _currentState.Enter();
         }
         else

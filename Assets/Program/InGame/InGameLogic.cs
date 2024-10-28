@@ -22,13 +22,14 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
     public async UniTask PlayCard(Card card)
     {
-        card.GetIcon().enabled = false;
+        card.GetPanel().alpha = 0;
         // Cardをターゲットにセットする
         await card.transform.DOMove(_targetTransform.transform.position, 0.1f);
         await _inGameView.ShowEffect(card.GetSummonEffectName(),_targetTransform.transform.position);
-        card.GetIcon().enabled = true;
+        card.GetPanel().alpha = 1;
         PlayerHand.RemoveCard(card);
         await StateMachine.GetInstance().ChangeState("battle");
+        // ToDo: BattlePhaseで呼び出す
         await CardBattle(card);
     }
 
@@ -86,7 +87,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
             await hitEffectInstance.SetParticle(hitEffectInstance);
         }
         
-        await StateMachine.GetInstance().ChangeState("turnEnd");
         Destroy(card.gameObject);
+        await StateMachine.GetInstance().ChangeState("turnEnd");
     }
 }

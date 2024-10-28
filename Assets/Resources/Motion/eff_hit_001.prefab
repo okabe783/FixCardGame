@@ -9700,7 +9700,7 @@ MonoBehaviour:
   _magnification: 0
   _seSettings: []
   _onHitEffect: 
-  _destroyTime: 2
+  _destroyTime: 1
 --- !u!1 &7050854340910962202
 GameObject:
   m_ObjectHideFlags: 0

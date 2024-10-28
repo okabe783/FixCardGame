@@ -8,10 +8,11 @@ using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [SerializeField, Header("Image")] private Image _icon;
+    [SerializeField] private Image _icon;
+    [SerializeField] private CanvasGroup _panelCanvasGroup;
     [SerializeField, Header("説明")]　private TextMeshProUGUI _descriptionText;
 
-    [SerializeField] private bool _isDraggable;
+    private bool _isDraggable;
 
     private int _power;
     private string _attackEffectName;
@@ -45,9 +46,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         return _summonEffectName;
     }
 
-    public Image GetIcon()
+    public CanvasGroup GetPanel()
     {
-        return _icon;
+        return _panelCanvasGroup;
     }
 
     private void Start()
