@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
         _currentHp -= hp;
     }
 
-    private void Start()
+    private void Awake()
     {
         SetEnemy(1);
     }

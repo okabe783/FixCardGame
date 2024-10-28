@@ -8,11 +8,6 @@ public class BattlePhase : State
         
     }
 
-    public override void OnUpdate()
-    {
-        
-    }
-
     public override async void Exit()
     {
         

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private int _hp = 10;
+    [SerializeField ]private int _hp = 10;
 
     public int GetHP()
     {

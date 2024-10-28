@@ -16,11 +16,6 @@ public class TurnStartPhase : State
         await StateMachine.GetInstance().ChangeState("play");
     }
 
-    public override void OnUpdate()
-    {
-        
-    }
-
     public override void Exit()
     {
         

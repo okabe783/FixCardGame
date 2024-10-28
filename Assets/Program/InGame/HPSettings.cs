@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class HPSettings : MonoBehaviour
 
     private int _playerHP;
     private int _enemyHP;
-
+    
     public void  UpdatePlayerHPText(int hp)
     {
         _playerHPText.text = $"自分の残りHP　:　{hp.ToString()}";
@@ -16,7 +17,7 @@ public class HPSettings : MonoBehaviour
     
     public void  UpdateEnemyHPText(int hp)
     {
-        _enemyHPText.text = $"自分の残りHPは　:　{hp.ToString()}";
+        _enemyHPText.text = $"敵の残りHPは　:　{hp.ToString()}";
     }
 
     public int GetPlayerHP()

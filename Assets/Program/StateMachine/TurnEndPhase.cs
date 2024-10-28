@@ -16,11 +16,6 @@ public class TurnEndPhase :State
         await StateMachine.GetInstance().ChangeState("turnStart");
     }
 
-    public override void OnUpdate()
-    {
-        
-    }
-
     
     public override void Exit()
     {

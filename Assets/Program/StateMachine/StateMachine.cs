@@ -7,14 +7,9 @@ public class StateMachine : MonoBehaviour
     [SerializeField] private InGameView _inGameView;
     private State _currentState; 
     private readonly Dictionary<string, State> _states = new(); 
-
     private static StateMachine _stateMachine;
 
-    private MulliganPhase _mulliganPhase;
-    private TurnStartPhase _turnStartPhase;
-    private PlayPhase _playPhase;
-    private BattlePhase _battlePhase;
-    private TurnEndPhase _turnEndPhase;
+    
 
     public static StateMachine GetInstance()
     {
@@ -33,6 +28,7 @@ public class StateMachine : MonoBehaviour
         AddState("play", new PlayPhase());
         AddState("battle", new BattlePhase());
         AddState("turnEnd", new TurnEndPhase(_inGameView));
+        AddState("gameEnd",new GameEnd(_inGameView));
     }
 
     private async UniTask Start()
@@ -45,8 +41,7 @@ public class StateMachine : MonoBehaviour
     {
         _states.TryAdd(key, state);
     }
-
-    //Stateの登録
+    
     public async UniTask ChangeState(string key)
     {
         if (_currentState != null)

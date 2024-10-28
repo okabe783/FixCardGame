@@ -31,6 +31,12 @@ public class InGameView : MonoBehaviour
         await UniTask.Delay(1000);
         Destroy(panelInstance.gameObject);
     }
+
+    public void ShowGameEndPanel(string panelText)
+    {
+        var gameEnd = FindAnyObjectByType<GameEndPanel>();
+        gameEnd.ActiveGameEndPanel(panelText);
+    }
     
     public async UniTask ShowEffect(string effectName,Vector2 position)
     {
