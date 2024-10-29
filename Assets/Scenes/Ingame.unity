@@ -167,11 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 379796385}
-  _cardGenerator: {fileID: 584100428}
   _playerHand: {fileID: 2041365935860569351}
-  _homeTransform: {fileID: 2041365935860569351}
   _targetTransform: {fileID: 6847151695720405400}
-  _gameEndPanel: {fileID: 1599141926078609536}
   _inGameView: {fileID: 714009667}
 --- !u!114 &50060984 stripped
 MonoBehaviour:
@@ -444,7 +441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f48978be9f554f048a65fee1c159d100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hp: 10
+  _hp: 1
 --- !u!4 &379796386
 Transform:
   m_ObjectHideFlags: 0
@@ -879,6 +876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a449014501ca88449149053a0e5fc8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameEndPanel: {fileID: 1599141926078609536}
 --- !u!1 &742984321 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6931514649004267506, guid: ec93fe40277bd0741bd58f1a160f42dc, type: 3}
@@ -914,6 +912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inGameView: {fileID: 714009667}
+  _enemy: {fileID: 1016121794}
 --- !u!4 &856803696
 Transform:
   m_ObjectHideFlags: 0

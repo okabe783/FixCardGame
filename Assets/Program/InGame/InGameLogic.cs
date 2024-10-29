@@ -3,26 +3,19 @@ using UnityEngine;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 
-// InGameのロジックを管理する
 public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 {
     [SerializeField] private Player _player;
-
-    [SerializeField, Header("Cardを生成するクラス")]
-    private CardGenerator _cardGenerator;
-
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
-    [SerializeField, Header("手札の位置")] private PlayerHand _homeTransform;
     [SerializeField, Header("置きたい場所")] private GameObject _targetTransform;
-    [SerializeField] private GameEndPanel _gameEndPanel;
     [SerializeField] private InGameView _inGameView;
+    
     private Enemy _enemy;
+    private CardGenerator _cardGenerator;
 
     // Eventの発行
     private readonly ReactiveProperty<InGamePhase> _currentPhase = new();
-
     public IReactiveProperty<InGamePhase> CurrentPhase => _currentPhase;
-
     public PlayerHand PlayerHand => _playerHand;
 
     private void Start()
@@ -33,6 +26,13 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         {
             Debug.LogError("敵がみつかりません");
             return;
+        }
+
+        _cardGenerator = FindAnyObjectByType<CardGenerator>();
+
+        if (_cardGenerator == null)
+        {
+            Debug.LogError("CardGeneratorが見つかりません");
         }
 
         _inGameView.ChangeHPBar(_enemy.GetCurrentHp(), 0);
@@ -63,8 +63,6 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
     public async UniTask CardBattle(Card card)
     {
-        _enemy = FindAnyObjectByType<Enemy>();
-
         EnemyAttribute enemyAttribute = _enemy.GetAttribute();
         EnemyAttribute cardAttribute = card.GetCardSkill();
 
@@ -100,19 +98,20 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
             await hitEffectInstance.SetParticle(hitEffectInstance);
         }
 
-        if (_enemy.GetCurrentHp() <= 0)
+        if (_enemy.GetCurrentHp() <= 0 || _player.GetHP() <= 0)
         {
-            _gameEndPanel.gameObject.SetActive(true);
-            _gameEndPanel.ActiveGameEndPanel("Win!");
+            // _gameEndPanel.gameObject.SetActive(true);
+            // _gameEndPanel.ActiveGameEndPanel("Win!");]
+            await StateMachine.GetInstance().ChangeState("gameEnd");
             return;
         }
 
-        if (_player.GetHP() <= 0)
-        {
-            _gameEndPanel.gameObject.SetActive(true);
-            _gameEndPanel.ActiveGameEndPanel("Lose!");
-            return;
-        }
+        // if (_player.GetHP() <= 0)
+        // {
+        //     _gameEndPanel.gameObject.SetActive(true);
+        //     _gameEndPanel.ActiveGameEndPanel("Lose!");
+        //     return;
+        // }
 
         Destroy(card.gameObject);
         await StateMachine.GetInstance().ChangeState("turnEnd");

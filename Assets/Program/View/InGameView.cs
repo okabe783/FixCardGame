@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class InGameView : MonoBehaviour
 {
+    [SerializeField] private GameEndPanel _gameEndPanel;
     // ゲームのメインセットアップ
     public async UniTask GameMainSetUp()
     {
@@ -32,10 +33,10 @@ public class InGameView : MonoBehaviour
         Destroy(panelInstance.gameObject);
     }
 
-    public void ShowGameEndPanel(string panelText)
+    public async UniTask ShowGameEndPanel(string panelText)
     {
-        var gameEnd = FindAnyObjectByType<GameEndPanel>();
-        gameEnd.ActiveGameEndPanel(panelText);
+        _gameEndPanel.ActiveGameEndPanel(panelText);
+        await UniTask.Delay(2000);
     }
     
     public async UniTask ShowEffect(string effectName,Vector2 position)

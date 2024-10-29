@@ -5,11 +5,10 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     [SerializeField] private InGameView _inGameView;
+    [SerializeField] private Enemy _enemy;
     private State _currentState; 
     private readonly Dictionary<string, State> _states = new(); 
     private static StateMachine _stateMachine;
-
-    
 
     public static StateMachine GetInstance()
     {
@@ -28,7 +27,7 @@ public class StateMachine : MonoBehaviour
         AddState("play", new PlayPhase());
         AddState("battle", new BattlePhase());
         AddState("turnEnd", new TurnEndPhase(_inGameView));
-        AddState("gameEnd",new GameEnd(_inGameView));
+        AddState("gameEnd",new GameEnd(_inGameView,_enemy));
     }
 
     private async UniTask Start()

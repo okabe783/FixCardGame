@@ -7,6 +7,7 @@ public class GameEndPanel : MonoBehaviour
 
     public void ActiveGameEndPanel(string gameEndText)
     {
+        gameObject.SetActive(true);
         _gameEndText.text = gameEndText;
     }
 }
