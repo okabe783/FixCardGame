@@ -1,6 +1,5 @@
 using UnityEngine;
 
-/// <summary>カードを配る</summary>
 public class CardGenerator : MonoBehaviour
 {
     [SerializeField, Header("Cardのprefab")] private Card _cardPrefab;

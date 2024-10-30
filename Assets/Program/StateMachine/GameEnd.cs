@@ -18,6 +18,6 @@ public class GameEnd : State
 
     public override void Exit()
     {
-        
+        SceneController.I.SceneChange("Result");
     }
 }

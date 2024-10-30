@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
@@ -12,8 +13,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     [SerializeField] private CanvasGroup _panelCanvasGroup;
     [SerializeField, Header("説明")]　private TextMeshProUGUI _descriptionText;
 
-    private bool _isDraggable;
 
+    private bool _isDraggable;
     private int _power;
     private string _attackEffectName;
     private string _summonEffectName;
@@ -21,6 +22,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     private Vector2 _currentPosition;
     private const float _threshold = 50f;
     private EnemyAttribute _skill;
+    [SerializeField] private List<GameObject> _colorImage = new();
+
     public UnityAction OnEndDragAction;
 
     //勝敗を決めるときに使う
@@ -64,6 +67,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
                 _isDraggable = false;
             }
         }).AddTo(this);
+
+        SetColorImage();
     }
 
     private void Update()
@@ -75,6 +80,43 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         else
         {
             _isDraggable = false;
+        }
+    }
+
+    private void SetColorImage()
+    {
+        Dictionary<EnemyAttribute, Color> attributeColors = new Dictionary<EnemyAttribute, Color>
+        {
+            { EnemyAttribute.Red, Color.red },
+            { EnemyAttribute.Green, Color.green },
+            { EnemyAttribute.Blue, Color.blue },
+            { EnemyAttribute.Yellow, Color.yellow },
+            { EnemyAttribute.Black, Color.black },
+            { EnemyAttribute.White, Color.white }
+        };
+
+        int colorIndex = 0;
+
+        // 各_imageColorに対して属性をチェックし、色を設定
+        foreach (var attributeColor in attributeColors)
+        {
+            if (_skill.HasFlag(attributeColor.Key) && colorIndex < _colorImage.Count) // 属性が一致する場合
+            {
+                Image image = _colorImage[colorIndex].GetComponent<Image>();
+                if (image != null)
+                {
+                    Color color = attributeColor.Value; // 該当する色を適用
+                    color.a = 1f;
+                    image.color = color;
+                    
+                    colorIndex++;
+                }
+            }
+
+            if (colorIndex >= 3)
+            {
+                break;
+            }
         }
     }
 

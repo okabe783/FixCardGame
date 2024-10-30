@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 2120977282821470880}
   m_Layer: 5
   m_Name: color3
-  m_TagString: Untagged
+  m_TagString: ColorObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -438,6 +438,10 @@ MonoBehaviour:
   _icon: {fileID: 8454825704586190382}
   _panelCanvasGroup: {fileID: 1037029622290589568}
   _descriptionText: {fileID: 1825201833855516204}
+  _colorImage:
+  - {fileID: 5261233673793897982}
+  - {fileID: 7626531507617313950}
+  - {fileID: 1289674960536321488}
 --- !u!1 &5261233673793897982
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,7 +455,7 @@ GameObject:
   - component: {fileID: 4537204406958673672}
   m_Layer: 5
   m_Name: color1
-  m_TagString: Untagged
+  m_TagString: ColorObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -496,7 +500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -526,7 +530,7 @@ GameObject:
   - component: {fileID: 8210444207382905765}
   m_Layer: 5
   m_Name: color2
-  m_TagString: Untagged
+  m_TagString: ColorObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -571,7 +575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

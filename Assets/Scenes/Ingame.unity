@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 25840021}
   - component: {fileID: 25840022}
+  - component: {fileID: 25840023}
   m_Layer: 0
   m_Name: System
   m_TagString: Untagged
@@ -170,6 +171,18 @@ MonoBehaviour:
   _playerHand: {fileID: 2041365935860569351}
   _targetTransform: {fileID: 6847151695720405400}
   _inGameView: {fileID: 714009667}
+--- !u!114 &25840023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25840019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce05fc6d333f68c47a6489afa33862a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &50060984 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4773004055278609208, guid: 0beb895e60d6fd347ac5e6eb7131472e, type: 3}
@@ -441,7 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f48978be9f554f048a65fee1c159d100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hp: 1
+  _hp: 10
 --- !u!4 &379796386
 Transform:
   m_ObjectHideFlags: 0
@@ -1076,6 +1089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _icon: {fileID: 1016121792}
+  isDebugMode: 1
 --- !u!1 &1616574688
 GameObject:
   m_ObjectHideFlags: 0
@@ -1851,7 +1865,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1682325101748488372, guid: 0beb895e60d6fd347ac5e6eb7131472e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.5
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1682325101748488372, guid: 0beb895e60d6fd347ac5e6eb7131472e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7.1
       objectReference: {fileID: 0}
     - target: {fileID: 3575273904818054787, guid: 0beb895e60d6fd347ac5e6eb7131472e, type: 3}
       propertyPath: m_fontSize

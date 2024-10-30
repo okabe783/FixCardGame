@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 //Title画面でセッティングするものを設定
 public class TitleSetting : MonoBehaviour
@@ -11,15 +10,8 @@ public class TitleSetting : MonoBehaviour
     
     public void Start()
     {
-        _startButton.OnClickAddListener(OnChangeStartScene);
         _descriptionButton.OnClickAddListener(OnChangeDescriptionScene);
         AudioManager.I.OnPlayBGM(_titleBgm);
-    }
-    
-    //Gameをスタート
-    private static void OnChangeStartScene()
-    {
-        SceneManager.LoadScene("InGame");
     }
 
     //遊び方説明を表示
