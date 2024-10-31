@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackEffectName: eff_attack_01
   SummonEffectName: eff_summon_01
-  CardPower: 3
+  CardPower: 1
   ID: 20
   Icon: {fileID: 21300000, guid: b9643bfb0eec5a24e8fa83978e4fb3b8, type: 3}
   Description: "\u3046\u3046\u3046"

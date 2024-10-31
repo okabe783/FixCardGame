@@ -171,6 +171,7 @@ MonoBehaviour:
   _playerHand: {fileID: 2041365935860569351}
   _targetTransform: {fileID: 6847151695720405400}
   _inGameView: {fileID: 714009667}
+  cardDataList: 41
 --- !u!114 &25840023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -688,7 +689,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cardPrefab: {fileID: 854597874622652960, guid: b929f8401852d1348a419c8d05cdc50c, type: 3}
   _startCardPosition: {fileID: 1945440047}
-  _cardDataList: 40
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1089,7 +1089,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _icon: {fileID: 1016121792}
-  isDebugMode: 1
 --- !u!1 &1616574688
 GameObject:
   m_ObjectHideFlags: 0

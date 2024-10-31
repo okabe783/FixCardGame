@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 using DG.Tweening;
@@ -9,6 +11,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
     [SerializeField, Header("置きたい場所")] private GameObject _targetTransform;
     [SerializeField] private InGameView _inGameView;
+    [SerializeField,Header("全てのCardの数")] private int cardDataList;
     
     private Enemy _enemy;
     private CardGenerator _cardGenerator;
@@ -54,9 +57,12 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     // 手札を配布する
     public async UniTask AddCardToHand()
     {
+        List<int> cardIDs = Enumerable.Range(1,cardDataList).ToList();
+        cardIDs = cardIDs.OrderBy(x => Random.value).ToList();
+        
         for (int i = 0; i < 3; i++)
         {
-            Card createCard = _cardGenerator.SpawnCard();
+            Card createCard = _cardGenerator.SpawnCard(cardIDs[i]);
             await _playerHand.AddCard(createCard);
         }
     }
@@ -100,18 +106,9 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
         if (_enemy.GetCurrentHp() <= 0 || _player.GetHP() <= 0)
         {
-            // _gameEndPanel.gameObject.SetActive(true);
-            // _gameEndPanel.ActiveGameEndPanel("Win!");]
             await StateMachine.GetInstance().ChangeState("gameEnd");
             return;
         }
-
-        // if (_player.GetHP() <= 0)
-        // {
-        //     _gameEndPanel.gameObject.SetActive(true);
-        //     _gameEndPanel.ActiveGameEndPanel("Lose!");
-        //     return;
-        // }
 
         Destroy(card.gameObject);
         await StateMachine.GetInstance().ChangeState("turnEnd");

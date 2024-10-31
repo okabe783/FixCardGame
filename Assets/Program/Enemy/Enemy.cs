@@ -9,8 +9,6 @@ public class Enemy : MonoBehaviour
     private string _effectName;
     private int _id;
     private EnemyAttribute _attribute;
-
-    [SerializeField]private bool isDebugMode;
     public EnemyAttribute GetAttribute()
     {
         return _attribute;
@@ -34,14 +32,6 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         SetEnemy(1);
-    }
-
-    private void Start()
-    {
-        if (isDebugMode)
-        {
-            Debug.Log(_attribute);
-        }
     }
 
     //Enemyの情報をセット
