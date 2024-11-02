@@ -7,15 +7,14 @@ using Cysharp.Threading.Tasks;
 
 public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 {
-    [SerializeField] private Player _player;
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
     [SerializeField, Header("置きたい場所")] private GameObject _targetTransform;
+    [SerializeField, Header("全てのCardの数")] private int cardDataList;
     [SerializeField] private InGameView _inGameView;
-    [SerializeField,Header("全てのCardの数")] private int cardDataList;
-    
-    private Enemy _enemy;
-    private CardGenerator _cardGenerator;
+    [SerializeField] private CardGenerator _cardGenerator;
 
+    private Player _player;
+    private Enemy _enemy;
     // Eventの発行
     private readonly ReactiveProperty<InGamePhase> _currentPhase = new();
     public IReactiveProperty<InGamePhase> CurrentPhase => _currentPhase;
@@ -23,7 +22,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
     private void Start()
     {
-        _enemy = FindAnyObjectByType<Enemy>();
+        _enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
 
         if (_enemy == null)
         {
@@ -31,11 +30,12 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
             return;
         }
 
-        _cardGenerator = FindAnyObjectByType<CardGenerator>();
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
-        if (_cardGenerator == null)
+        if (_player == null)
         {
             Debug.LogError("CardGeneratorが見つかりません");
+            return;
         }
 
         _inGameView.ChangeHPBar(_enemy.GetCurrentHp(), 0);
@@ -57,9 +57,9 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     // 手札を配布する
     public async UniTask AddCardToHand()
     {
-        List<int> cardIDs = Enumerable.Range(1,cardDataList).ToList();
+        List<int> cardIDs = Enumerable.Range(0, cardDataList).ToList();
         cardIDs = cardIDs.OrderBy(x => Random.value).ToList();
-        
+
         for (int i = 0; i < 3; i++)
         {
             Card createCard = _cardGenerator.SpawnCard(cardIDs[i]);

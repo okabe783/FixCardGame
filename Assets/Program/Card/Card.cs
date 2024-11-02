@@ -134,6 +134,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         //属性をCardSkillから取得して保持
         if (_id < CardSkill.AllAttributes.Count)
         {
+            Debug.Log(CardSkill.AllAttributes.Count);
             _skill = CardSkill.AllAttributes[_id - 1];
         }
         else
