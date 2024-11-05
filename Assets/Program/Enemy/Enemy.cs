@@ -1,41 +1,37 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>Enemyの管理</summary>
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Image _icon;
-    private EnemySettings _enemyBase;
+    [SerializeField] private int _enemyDataList;
     private int _currentHp;
-    private string _effectName;
     private int _id;
+    private string _effectName;
     private EnemyAttribute _attribute;
-    public EnemyAttribute GetAttribute()
-    {
-        return _attribute;
-    }
+    private EnemySettings _enemyBase;
+    #region ゲッターメソッド
 
-    public string GetEffectName()
-    {
-        return _effectName; 
-    }
+    public EnemyAttribute GetAttribute() => _attribute;
+    public string GetEffectName() => _effectName; 
+    public int GetCurrentHp() => _currentHp;
+    public Image GetIcon() => _icon;
 
-    public int GetCurrentHp()
-    {
-        return _currentHp;
-    }
-
+    #endregion
+    
     public void SetCurrentHp(int hp)
     {
         _currentHp -= hp;
     }
-
+    
     private void Awake()
     {
-        SetEnemy(1);
+        SetEnemy(_enemyDataList);
     }
 
     //Enemyの情報をセット
-    public void SetEnemy(int enemyID)
+    private void SetEnemy(int enemyID)
     {
         EnemySettings enemyBase = Resources.Load<EnemySettings>("SOPrefabs/Enemy/Enemy" + enemyID);
         _icon.sprite = enemyBase.Sprite;

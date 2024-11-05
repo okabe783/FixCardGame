@@ -438,10 +438,10 @@ MonoBehaviour:
   _icon: {fileID: 8454825704586190382}
   _panelCanvasGroup: {fileID: 1037029622290589568}
   _descriptionText: {fileID: 1825201833855516204}
-  _colorImage:
-  - {fileID: 5261233673793897982}
-  - {fileID: 7626531507617313950}
-  - {fileID: 1289674960536321488}
+  _colorPanelObject:
+  - {fileID: 4537204406958673672}
+  - {fileID: 8210444207382905765}
+  - {fileID: 2120977282821470880}
 --- !u!1 &5261233673793897982
 GameObject:
   m_ObjectHideFlags: 0

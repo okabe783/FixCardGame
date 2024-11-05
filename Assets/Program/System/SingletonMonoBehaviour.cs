@@ -15,7 +15,6 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
                 _instance = (T)FindAnyObjectByType(t);
                 if (_instance == null)
                 {
-                    //ToDo:Instanceがない場合はつくる
                     Debug.LogError(t + "をアタッチしているオブジェクトはありません");
                 }
             }
@@ -41,7 +40,8 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
             _instance = this as T;
             return true;
         }
-        else if (I == this)
+        
+        if (I == this)
         {
             return true;
         }

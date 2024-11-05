@@ -4,7 +4,7 @@ using UnityEngine;
 public class InGameView : MonoBehaviour
 {
     [SerializeField] private GameEndPanel _gameEndPanel;
-    // ゲームのメインセットアップ
+    
     public async UniTask GameMainSetUp()
     {
         await DrawCard();

@@ -10,7 +10,7 @@ public class CardGenerator : MonoBehaviour
     {
         Card card = Instantiate(_cardPrefab,_startCardPosition.transform.position,Quaternion.identity);
         card.transform.SetParent(_startCardPosition.transform);
-        card.CardSet(cardID);
+        card.SetCardData(cardID);
         return card;
     }
 }

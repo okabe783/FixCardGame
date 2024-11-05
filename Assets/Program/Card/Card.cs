@@ -12,80 +12,53 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     [SerializeField] private Image _icon;
     [SerializeField] private CanvasGroup _panelCanvasGroup;
     [SerializeField, Header("説明")]　private TextMeshProUGUI _descriptionText;
-
-
-    private bool _isDraggable;
+    [SerializeField] private List<Image> _colorPanelObject = new();
+    
     private int _power;
+    private int _id;
+    private const float _threshold = 50f;
     private string _attackEffectName;
     private string _summonEffectName;
-    private int _id;
     private Vector2 _currentPosition;
-    private const float _threshold = 50f;
     private EnemyAttribute _skill;
-    [SerializeField] private List<GameObject> _colorImage = new();
-
+    private Dictionary<EnemyAttribute, Color> _attributeColors;
+    
+    private bool _isDraggable;
+    
     public UnityAction OnEndDragAction;
 
-    //勝敗を決めるときに使う
-    public CardSO CardDataBase { get; private set; }
+    #region 外部に公開するステータス
+    public EnemyAttribute GetCardSkill() => _skill;
 
-    public EnemyAttribute GetCardSkill()
-    {
-        return _skill;
-    }
+    public int GetCardPower() => _power;
 
-    public int GetCardPower()
-    {
-        return _power;
-    }
+    public string GetAttackEffectName() => _attackEffectName;
 
-    public string GetAttackEffectName()
-    {
-        return _attackEffectName;
-    }
+    public string GetSummonEffectName() => _summonEffectName;
 
-    public string GetSummonEffectName()
-    {
-        return _summonEffectName;
-    }
+    public CanvasGroup GetPanel() => _panelCanvasGroup;
 
-    public CanvasGroup GetPanel()
-    {
-        return _panelCanvasGroup;
-    }
+    public Image GetIcon() => _icon;
+    
+
+    #endregion 
 
     private void Start()
     {
-        InGameLogic.I.CurrentPhase.Subscribe(phase =>
-        {
-            if (phase == InGamePhase.Play)
-            {
-                _isDraggable = true;
-            }
-            else
-            {
-                _isDraggable = false;
-            }
-        }).AddTo(this);
-
-        SetColorImage();
+        InGameLogic.I.CurrentPhase.Subscribe(phase => { _isDraggable = phase == InGamePhase.Play; }).AddTo(this);
+        InitializeAttributeColors();
+        ApplyAttributeColors();
     }
 
     private void Update()
     {
-        if (StateMachine.GetInstance().GetCurrentState() is PlayPhase)
-        {
-            _isDraggable = true;
-        }
-        else
-        {
-            _isDraggable = false;
-        }
+        _isDraggable = StateMachine.GetInstance().GetCurrentState() is PlayPhase;
     }
 
-    private void SetColorImage()
+    private void InitializeAttributeColors()
     {
-        Dictionary<EnemyAttribute, Color> attributeColors = new Dictionary<EnemyAttribute, Color>
+        // 属性とそれに対応したカラーを辞書に登録
+        _attributeColors = new Dictionary<EnemyAttribute, Color>
         {
             { EnemyAttribute.Red, Color.red },
             { EnemyAttribute.Green, Color.green },
@@ -94,53 +67,55 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
             { EnemyAttribute.Black, Color.black },
             { EnemyAttribute.White, Color.white }
         };
+    }
 
+    private void ApplyAttributeColors()
+    {
         int colorIndex = 0;
 
-        // 各_imageColorに対して属性をチェックし、色を設定
-        foreach (var attributeColor in attributeColors)
+        // 各属性Panelに対して属性をチェックし、色を設定
+        foreach (var attributeColor in _attributeColors)
         {
-            if (_skill.HasFlag(attributeColor.Key) && colorIndex < _colorImage.Count) // 属性が一致する場合
+            if (_skill.HasFlag(attributeColor.Key) && colorIndex < _colorPanelObject.Count)
             {
-                Image image = _colorImage[colorIndex].GetComponent<Image>();
-                if (image != null)
+                Image panel = _colorPanelObject[colorIndex];
+                
+                if (panel != null)
                 {
-                    Color color = attributeColor.Value; // 該当する色を適用
+                    //該当する色を設定
+                    Color color = attributeColor.Value;
                     color.a = 1f;
-                    image.color = color;
-                    
+                    panel.color = color;
                     colorIndex++;
                 }
             }
 
-            if (colorIndex >= 3)
+            if (colorIndex >= _colorPanelObject.Count)
             {
                 break;
             }
         }
     }
 
-    public void CardSet(int cardID)
+    public void SetCardData(int cardID)
     {
-        CardSO cardBase = Resources.Load<CardSO>("SOPrefabs/Card/Card" + cardID);
-        CardDataBase = cardBase;
-        _icon.sprite = cardBase.Icon;
-        _descriptionText.text = cardBase.Description;
-        _id = cardBase.ID;
-        _power = cardBase.CardPower;
-        _attackEffectName = cardBase.AttackEffectName;
-        _summonEffectName = cardBase.SummonEffectName;
+        CardSO cardData = Resources.Load<CardSO>($"SOPrefabs/Card/Card{cardID}");
+        if (cardData == null)
+        {
+            Debug.LogError($"CardDataが存在しません");
+            return;
+        }
+        
+        _icon.sprite = cardData.Icon;
+        _descriptionText.text = cardData.Description;
+        _id = cardData.ID;
+        _power = cardData.CardPower;
+        _attackEffectName = cardData.AttackEffectName;
+        _summonEffectName = cardData.SummonEffectName;
 
-        //属性をCardSkillから取得して保持
-        if (_id < CardSkill.AllAttributes.Count)
-        {
-            Debug.Log(CardSkill.AllAttributes.Count);
-            _skill = CardSkill.AllAttributes[_id - 1];
-        }
-        else
-        {
-            Debug.LogError("cardIDがAllAttributesの範囲外です");
-        }
+        // 属性をCardSkillから取得して保持
+        _skill = _id < CardSkill.AllAttributes.Count ? 
+         CardSkill.AllAttributes[_id - 1] : throw new System.ArgumentOutOfRangeException("Card ID is out of range.");
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -153,33 +128,32 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        //Cardの移動
-        if (_isDraggable)
+        // カードの移動
+        if (!_isDraggable) return;
+        
+        float distance = Vector2.Distance(_currentPosition, eventData.position);
+        if (distance > _threshold)
         {
-            float distance = Vector2.Distance(_currentPosition, eventData.position);
-            if (distance > _threshold)
-            {
-                InGameLogic.I.PlayCard(this).Forget();
-            }
-            else
-            {
-                OnEndDragAction?.Invoke();
-            }
+            InGameLogic.I.PlayCard(this).Forget();
+        }
+        else
+        {
+            OnEndDragAction?.Invoke();
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (_isDraggable)
-        {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)transform.parent, // 親のRectTransform
-                eventData.position, // ドラッグ時のスクリーン座標
-                eventData.pressEventCamera, // イベントカメラ
-                out Vector2 localPoint); // ローカル座標に変換された結果を格納
+        if (!_isDraggable) return;
+        
+        // スクリーン座標からローカル座標に変換する
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            (RectTransform)transform.parent, 
+            eventData.position, // ドラッグ時のスクリーン座標
+            eventData.pressEventCamera, // イベントカメラ
+            out Vector2 localPoint); // ローカル座標に変換された結果を格納
 
-            // ローカル座標に変換された座標を使ってカードの位置を更新
-            transform.localPosition = localPoint;
-        }
+        // ローカル座標に変換された座標を使ってカードの位置を更新
+        transform.localPosition = localPoint;
     }
 }
