@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
-    [SerializeField] private InGameView _inGameView;
     [SerializeField] private Enemy _enemy;
     private State _currentState; 
     private readonly Dictionary<string, State> _states = new(); 
@@ -22,12 +21,12 @@ public class StateMachine : MonoBehaviour
 
     private void Awake()
     {
-        AddState("mulligan", new MulliganPhase(_inGameView));
-        AddState("turnStart", new TurnStartPhase(_inGameView));
+        AddState("mulligan", new MulliganPhase());
+        AddState("turnStart", new TurnStartPhase());
         AddState("play", new PlayPhase());
         AddState("battle", new BattlePhase());
-        AddState("turnEnd", new TurnEndPhase(_inGameView));
-        AddState("gameEnd",new GameEnd(_inGameView,_enemy));
+        AddState("turnEnd", new TurnEndPhase());
+        AddState("gameEnd",new GameEnd(_enemy));
     }
 
     private async UniTask Start()

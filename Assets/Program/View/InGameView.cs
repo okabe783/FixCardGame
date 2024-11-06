@@ -5,18 +5,6 @@ public class InGameView : MonoBehaviour
 {
     [SerializeField] private GameEndPanel _gameEndPanel;
     
-    public async UniTask GameMainSetUp()
-    {
-        await DrawCard();
-        await ShowActivePanel("StartPhase");
-    }
-    
-    public async UniTask DrawCard()
-    {
-        InGameLogic.I.PlayerHand.ResetCard();
-        await InGameLogic.I.AddCardToHand();
-    }
-    
     public async UniTask ShowActivePanel(string panelName)
     {
         PhasePanel panelPrefab = Resources.Load<PhasePanel>("Panel/CurrentPhasePanel");
