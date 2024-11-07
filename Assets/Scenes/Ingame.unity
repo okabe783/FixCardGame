@@ -1026,6 +1026,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameEndPanel: {fileID: 1599141926078609536}
+  _cutInPanel: {fileID: 714009668}
 --- !u!114 &714009668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1073,7 +1074,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5754af44914abd8ad43a93022f1e5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inGameView: {fileID: 714009667}
   _enemy: {fileID: 1016121794}
 --- !u!4 &856803696
 Transform:

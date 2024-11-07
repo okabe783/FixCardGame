@@ -23,6 +23,8 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
     private void Start()
     {
+        _inGameView = FindAnyObjectByType<InGameView>();
+        Debug.Log(_inGameView);
         _enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
@@ -111,46 +113,17 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
     private async UniTask PerformPlayerAttack(Card card)
     {
-        // Effectの設定
-        EffectSettings effectPrefab = Resources.Load<EffectSettings>("Motion/" + card.GetAttackEffectName());
-        if (effectPrefab == null)
-        {
-            Debug.LogError("Resourcesが読み込めません");
-            return;
-        }
-        
-        var cutInAnimation = _inGameView.gameObject.GetComponent<CutInPanel>();
-        await cutInAnimation.SlideIn(card.GetIcon(),"Player");
+        await _inGameView.ShowCutInAnimation(card.GetIcon(), "Player");
         _enemy.SetCurrentHp(card.GetCardPower());
         UpdateHPBars();
-        EffectSettings effectInstance = Instantiate(effectPrefab, card.transform.position, Quaternion.identity);
-        await effectInstance.MoveEffectToTarget(effectInstance, _enemy.transform.position);
-        
-        EffectSettings hitEffectPrefab = Resources.Load<EffectSettings>("Motion/" + effectPrefab.OnHitEffect);
-        EffectSettings hitEffectInstance =
-            Instantiate(hitEffectPrefab, _enemy.transform.position, Quaternion.identity);
-        await hitEffectInstance.SetParticle(hitEffectInstance);
+        await _inGameView.ShowEffect(card.GetAttackEffectName(), card.transform.position,_enemy.transform.position);
     }
 
     private async UniTask PerformEnemyAttack(Card card)
     {
-        EffectSettings effectPrefab = Resources.Load<EffectSettings>("Motion/" + _enemy.GetEffectName());
-        if (effectPrefab == null)
-        {
-            Debug.LogError("Resourcesが読み込めません");
-            return;
-        }
-        
-        var cutInAnimation = _inGameView.gameObject.GetComponent<CutInPanel>();
-        await cutInAnimation.SlideIn(_enemy.GetIcon(),"Enemy");
+        await _inGameView.ShowCutInAnimation(_enemy.GetIcon(), "Enemy");
         _player.ChangeHealth(1);
         UpdateHPBars();
-        
-        EffectSettings effectInstance = Instantiate(effectPrefab, _enemy.transform.position, Quaternion.identity);
-        await effectInstance.MoveEffectToTarget(effectInstance, card.transform.position);
-        
-        EffectSettings hitEffectPrefab = Resources.Load<EffectSettings>("Motion/" + effectPrefab.OnHitEffect);
-        EffectSettings hitEffectInstance = Instantiate(hitEffectPrefab, card.transform.position, Quaternion.identity);
-        await hitEffectInstance.SetParticle(hitEffectInstance);
+        await _inGameView.ShowEffect(_enemy.GetEffectName(), _enemy.transform.position,card.transform.position);
     }
 }
