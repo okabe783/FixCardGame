@@ -5,6 +5,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
 {
     private static T _instance;
 
+    //　シングルトンインスタンスを取得
     public static T I
     {
         get
@@ -33,6 +34,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
         CheckInstance();
     }
     
+    // 2つ以上存在する場合は削除する
     protected bool CheckInstance()
     {
         if (_instance == null)

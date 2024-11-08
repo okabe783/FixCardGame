@@ -12,7 +12,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     [SerializeField] private Image _icon;
     [SerializeField] private CanvasGroup _panelCanvasGroup;
     [SerializeField, Header("説明")]　private TextMeshProUGUI _descriptionText;
-    [SerializeField] private List<Image> _colorPanelObject = new();
+    [SerializeField] private Image[] _colorPanelObject;
     
     private int _power;
     private int _id;
@@ -40,7 +40,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
 
     public Image GetIcon() => _icon;
     
-
     #endregion 
 
     private void Start()
@@ -76,7 +75,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         // 各属性Panelに対して属性をチェックし、色を設定
         foreach (var attributeColor in _attributeColors)
         {
-            if (_skill.HasFlag(attributeColor.Key) && colorIndex < _colorPanelObject.Count)
+            if (_skill.HasFlag(attributeColor.Key) && colorIndex < _colorPanelObject.Length)
             {
                 Image panel = _colorPanelObject[colorIndex];
                 
@@ -90,7 +89,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
                 }
             }
 
-            if (colorIndex >= _colorPanelObject.Count)
+            if (colorIndex >= _colorPanelObject.Length)
             {
                 break;
             }
@@ -115,7 +114,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
 
         // 属性をCardSkillから取得して保持
         _skill = _id < CardSkill.AllAttributes.Count ? 
-         CardSkill.AllAttributes[_id - 1] : throw new System.ArgumentOutOfRangeException("Card ID is out of range.");
+         CardSkill.AllAttributes[_id - 1] : throw new System.ArgumentOutOfRangeException(nameof(cardID));
     }
 
     public void OnPointerDown(PointerEventData eventData)

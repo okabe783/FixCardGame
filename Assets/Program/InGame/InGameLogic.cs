@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
@@ -19,14 +18,11 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
    
     private readonly ReactiveProperty<InGamePhase> _currentPhase = new();
     public IReactiveProperty<InGamePhase> CurrentPhase => _currentPhase;
-    public PlayerHand PlayerHand => _playerHand;
 
     private void Start()
     {
-        _inGameView = FindAnyObjectByType<InGameView>();
-        Debug.Log(_inGameView);
-        _enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        _enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
 
         if (_enemy == null || _player == null)
         {
@@ -55,14 +51,18 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         await AddCardToHand();
     }
     
-    public async UniTask AddCardToHand()
+    private async UniTask AddCardToHand()
     {
-        List<int> cardIDs = Enumerable.Range(0, _cardDataList).ToList();
-        cardIDs = cardIDs.OrderBy(_ => Random.value).ToList();
+        if (_cardDataList < 3)
+        {
+            Debug.LogError("カードデータの数が足りません。");
+            return;
+        }
+        int[] cardIDs = Enumerable.Range(0, _cardDataList).OrderBy(_ => Random.value).Take(3).ToArray();
 
         for (int i = 0; i < 3; i++)
         {
-            Card createCard = _cardGenerator.SpawnCard(cardIDs[i + 1]);
+            Card createCard = _cardGenerator.SpawnCard(cardIDs[i]);
             await _playerHand.AddCard(createCard);
         }
     }
@@ -83,13 +83,14 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         await card.transform.DOMove(_targetTransform.transform.position, 0.1f);
         await _inGameView.ShowEffect(card.GetSummonEffectName(), _targetTransform.transform.position);
         card.GetPanel().alpha = 1;
-        PlayerHand.RemoveCard(card);
+        _playerHand.RemoveCard(card);
         await StateMachine.GetInstance().ChangeState("battle");
         await CardBattle(card);
     }
 
     private async UniTask CardBattle(Card card)
     {
+        Debug.Log(_enemy.GetAttribute());
         bool isEffective = (_enemy.GetAttribute() & card.GetCardSkill()) != 0;
 
         if (isEffective)
