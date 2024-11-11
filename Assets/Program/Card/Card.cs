@@ -16,7 +16,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     
     private int _power;
     private int _id;
-    private const float _threshold = 50f;
+    private const float _threshold = 200f;
     private string _attackEffectName;
     private string _summonEffectName;
     private Vector2 _currentPosition;
@@ -101,6 +101,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         CardSO cardData = Resources.Load<CardSO>($"SOPrefabs/Card/Card{cardID}");
         if (cardData == null)
         {
+            //0番目が与えられている
+            Debug.Log(cardID); 
             Debug.LogError($"CardDataが存在しません");
             return;
         }

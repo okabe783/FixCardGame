@@ -12,8 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e009ce1fdb814c4da062f2caf08a21f, type: 3}
   m_Name: Enemy1
   m_EditorClassIdentifier: 
-  EnemyAttribute: 1
   EnemyID: 0
   Hp: 10
   Sprite: {fileID: 21300000, guid: 3188723dafd1e9545bf182ba3ef325ed, type: 3}
   EffectName: eff_attack_01
+  _commandDatabase:
+    _abilities:
+    - rid: 1527406623523340289
+  references:
+    version: 2
+    RefIds:
+    - rid: 1527406623523340289
+      type: {class: EnemyPowerUpSkill, ns: Program.Enemy, asm: Assembly-CSharp}
+      data: 

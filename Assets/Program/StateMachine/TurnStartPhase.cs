@@ -5,7 +5,7 @@ public class TurnStartPhase : State
 
     public override async UniTask Enter()
     {
-        await InGameLogic.I.DrawCard();
+        await InGameLogic.I.StartCard();
         await InGameLogic.I.ShowPhasePanel("StartPhase");
         await StateMachine.GetInstance().ChangeState("play");
     }

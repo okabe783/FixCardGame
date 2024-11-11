@@ -11,7 +11,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     [SerializeField] private CardGenerator _cardGenerator;
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
     [SerializeField, Header("置きたい場所")] private GameObject _targetTransform;
-    [SerializeField, Header("全てのCardの数")] private int _cardDataList;
+   [SerializeField, Header("全てのCardの数")] private int _cardDataList;
 
     private Player _player;
     private Enemy _enemy;
@@ -35,17 +35,17 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
 
     private void UpdateHPBars()
     {
-        _inGameView.ChangeHPBar(_player.GetHP(), 1);
-        _inGameView.ChangeHPBar(_enemy.GetCurrentHp(), 0);
+        _inGameView.ChangeHPBar(_player.GetHP(), 0);
+        _inGameView.ChangeHPBar(_enemy.GetCurrentHp(), 1);
     }
     
     public async UniTask GameMainSetUp()
     {
-        await DrawCard();
+        await StartCard();
         await _inGameView.ShowActivePanel("StartPhase");
     }
 
-    public async UniTask DrawCard()
+    public async UniTask StartCard()
     {
         _playerHand.ResetCard();
         await AddCardToHand();
@@ -53,7 +53,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     
     private async UniTask AddCardToHand()
     {
-        if (_cardDataList < 3)
+        if (_cardDataList < 3) 
         {
             Debug.LogError("カードデータの数が足りません。");
             return;

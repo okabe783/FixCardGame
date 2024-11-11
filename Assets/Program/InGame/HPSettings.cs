@@ -12,12 +12,12 @@ public class HPSettings : MonoBehaviour
     
     public void  UpdatePlayerHPText(int hp)
     {
-        _playerHPText.text = $"自分の残りHP　:　{hp.ToString()}";
+        _playerHPText.text = $"自分の残りHP : {hp.ToString()}";
     }
     
     public void  UpdateEnemyHPText(int hp)
     {
-        _enemyHPText.text = $"敵の残りHPは　:　{hp.ToString()}";
+        _enemyHPText.text = $"敵の残りHP : {hp.ToString()}";
     }
 
     public int GetPlayerHP()

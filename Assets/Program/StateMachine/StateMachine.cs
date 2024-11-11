@@ -33,7 +33,7 @@ public class StateMachine : MonoBehaviour
     {
         await ChangeState("mulligan");
     }
-
+    
     // 状態を登録
     private void AddState(string key, State state)
     {

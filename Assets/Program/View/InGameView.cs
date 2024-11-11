@@ -84,10 +84,10 @@ public class InGameView : MonoBehaviour
         switch (playerIndex)
         {
             case 0:
-                hpSettings.UpdateEnemyHPText(hp);
+                hpSettings.UpdatePlayerHPText(hp);
                 break;
             case 1:
-                hpSettings.UpdatePlayerHPText(hp);
+                hpSettings.UpdateEnemyHPText(hp);
                 break;
             default:
                 Debug.LogError("無効です");
