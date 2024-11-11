@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 [Serializable]
@@ -9,11 +10,16 @@ public class SkillDatabase
     private List<IAbility> _abilities = new();
 
     // Skillの発動処理
-    public void ActiveSkill()
+    public async UniTask ActiveSkill(Enemy enemy)
     {
-        foreach (var ability in _abilities)
+        var task = new List<UniTask>();
         {
-            ability?.SetAbility();
+            foreach (var ability in _abilities)
+            {
+                task.Add(ability.SetAbility(enemy));
+            }
         }
+
+        await UniTask.WhenAll(task);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -9,10 +10,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Image _icon;
     [SerializeField] private int _enemyDataList;
     private int _currentHp;
+    private int _power;
+    private int _powerValue;
+    private int _healValue;
     private int _id;
+    //　何Turn目にスキルを発動するかを設定
+    private int _activeSkillTurn;
     private string _effectName;
+    
     private EnemyAttribute _attribute;
     private EnemySettings _enemyBase;
+    
+    private SkillDatabase _skillDatabase;
 
     #region ゲッターメソッド
 
@@ -23,11 +32,15 @@ public class Enemy : MonoBehaviour
 
     #endregion
     
+    public void SetCurrentHp(int hp) => _currentHp -= hp;
 
-    public void SetCurrentHp(int hp)
-    {
-        _currentHp -= hp;
-    }
+    public void SetPower() => _power += _powerValue;
+    
+    public EnemySettings GetEnemyBase() => _enemyBase;
+
+    public int GetActiveSkillTurn() => _activeSkillTurn;
+    
+    public int GetHealValue() => _healValue;
 
     private void Awake()
     {
@@ -58,7 +71,21 @@ public class Enemy : MonoBehaviour
         _icon.sprite = enemyBase.Sprite;
         _enemyBase = enemyBase;
         _currentHp = enemyBase.Hp;
+        _activeSkillTurn = enemyBase.ActiveSkillTurn;
         _id = enemyBase.EnemyID;
         _effectName = enemyBase.EffectName;
+        _skillDatabase = enemyBase.CommandDatabase;
+        
+        // Todo: スキルがついているときのみ入れる
+        _powerValue = enemyBase.powerValue;
+        _healValue = enemyBase.HealValue;
+    }
+
+    public async UniTask ActiveSkill(Enemy enemy)
+    {
+        if (_skillDatabase != null)
+        {
+            await _skillDatabase.ActiveSkill(enemy);
+        }
     }
 }

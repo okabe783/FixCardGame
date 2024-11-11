@@ -1,16 +1,13 @@
-using UnityEngine;
+using Cysharp.Threading.Tasks;
 
-namespace Program.Enemy
+public class EnemyPowerUpSkill : IAbility
 {
-    public class EnemyPowerUpSkill : IAbility
-    {
-        private IAbility _abilityImplementation;
-        
-        public string Name()　=> "攻撃力上昇スキル";
+    public string Name()　=> "攻撃力上昇スキル";
 
-        public void SetAbility()
-        {
-            Debug.Log("敵のPowerをあげる処理");
-        }
+    public async UniTask SetAbility(Enemy enemy)
+    {
+        enemy.SetPower();
+        // ToDo : スキルのエフェクトを発動
+        await UniTask.Delay(500); // エフェクトを待つ例
     }
 }

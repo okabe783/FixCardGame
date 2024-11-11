@@ -1,12 +1,14 @@
-using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 public class EnemyHealSkill : IAbility
 {
-    private IAbility _abilityImplementation;
     public string Name() => "回復スキル";
 
-    public void SetAbility()
+    public async UniTask SetAbility(Enemy enemy)
     {
-        Debug.Log("体力を回復した");
+        // 回復の処理
+        enemy.SetCurrentHp(-enemy.GetHealValue());
+        // ToDo: Effectの処理
+        await UniTask.Delay(500); 
     }
 }

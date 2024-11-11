@@ -12,6 +12,8 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
     [SerializeField, Header("置きたい場所")] private GameObject _targetTransform;
    [SerializeField, Header("全てのCardの数")] private int _cardDataList;
+   
+   private int _turnCount = 0;
 
     private Player _player;
     private Enemy _enemy;
@@ -110,6 +112,17 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         
         Destroy(card.gameObject);
         await StateMachine.GetInstance().ChangeState("turnEnd");
+    }
+
+    public async UniTask ActiveEnemySkill()
+    {
+        _turnCount++;
+
+        if (_turnCount == _enemy.GetActiveSkillTurn())
+        {
+            await _enemy.ActiveSkill(_enemy);
+            _turnCount = 0;
+        }
     }
 
     private async UniTask PerformPlayerAttack(Card card)
