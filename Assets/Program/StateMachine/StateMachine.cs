@@ -5,8 +5,8 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     [SerializeField] private Enemy _enemy;
-    private State _currentState; 
-    private readonly Dictionary<string, State> _states = new(); 
+    private IState _currentState; 
+    private readonly Dictionary<string, IState> _states = new(); 
     private static StateMachine _stateMachine;
 
     public static StateMachine GetInstance()
@@ -35,7 +35,7 @@ public class StateMachine : MonoBehaviour
     }
     
     // 状態を登録
-    private void AddState(string key, State state)
+    private void AddState(string key, IState state)
     {
         _states.TryAdd(key, state);
     }
@@ -58,7 +58,7 @@ public class StateMachine : MonoBehaviour
         }
     }
 
-    public State GetCurrentState()
+    public IState GetCurrentState()
     {
         return _currentState;
     }

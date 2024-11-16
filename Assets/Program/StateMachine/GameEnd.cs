@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 
-public class GameEnd : State
+public class GameEnd : IState
 {
     private readonly Enemy _enemy;
     
@@ -8,13 +8,13 @@ public class GameEnd : State
     {
         _enemy = enemy;
     }
-    public override async UniTask Enter()
+    public async UniTask Enter()
     {
         await InGameLogic.I.ShowGameEndPanel(_enemy.GetCurrentHp() <= 0 ? "WIN!" : "Lose!");
         Exit();
     }
 
-    public override void Exit()
+    public void Exit()
     {
         SceneController.I.SceneChange("Result");
     }

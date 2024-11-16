@@ -1,16 +1,16 @@
 using Cysharp.Threading.Tasks;
 
-public class TurnEndPhase :State
+public class TurnEndPhase :IState
 {
     
-    public override async UniTask Enter()
+    public async UniTask Enter()
     {
         await InGameLogic.I.ShowPhasePanel("EndPhase");
         await StateMachine.GetInstance().ChangeState("turnStart");
     }
 
     
-    public override void Exit()
+    public void Exit()
     {
         
     }

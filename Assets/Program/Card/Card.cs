@@ -1,5 +1,5 @@
+using System;
 using TMPro;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler,IDraggable
 {
     [SerializeField] private Image _icon;
     [SerializeField] private CanvasGroup _panelCanvasGroup;
@@ -26,6 +26,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     private bool _isDraggable;
     
     public UnityAction OnEndDragAction;
+    public Func<UniTask> OnBattleAction;
 
     #region 外部に公開するステータス
     public EnemyAttribute GetCardSkill() => _skill;
@@ -44,14 +45,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
 
     private void Start()
     {
-        InGameLogic.I.CurrentPhase.Subscribe(phase => { _isDraggable = phase == InGamePhase.Play; }).AddTo(this);
         InitializeAttributeColors();
         ApplyAttributeColors();
-    }
-
-    private void Update()
-    {
-        _isDraggable = StateMachine.GetInstance().GetCurrentState() is PlayPhase;
     }
 
     private void InitializeAttributeColors()
@@ -101,7 +96,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         CardSO cardData = Resources.Load<CardSO>($"SOPrefabs/Card/Card{cardID}");
         if (cardData == null)
         {
-            //0番目が与えられている
             Debug.Log(cardID); 
             Debug.LogError($"CardDataが存在しません");
             return;
@@ -135,7 +129,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         float distance = Vector2.Distance(_currentPosition, eventData.position);
         if (distance > _threshold)
         {
-            InGameLogic.I.PlayCard(this).Forget();
+            // カードを提出したことを通知する
+            OnBattleAction?.Invoke();
         }
         else
         {
@@ -156,5 +151,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
 
         // ローカル座標に変換された座標を使ってカードの位置を更新
         transform.localPosition = localPoint;
+    }
+
+    // Drag制御
+    public void IsDragging(bool isDragging)
+    {
+        _isDraggable = isDragging;
     }
 }

@@ -1,8 +1,9 @@
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
-public class MulliganPhase : State
+public class MulliganPhase : IState
 {
-    public override async UniTask Enter()
+    public async UniTask Enter()
     {
         await InGameLogic.I.GameMainSetUp();
         // ToDo:Mulliganの処理
@@ -10,7 +11,7 @@ public class MulliganPhase : State
         await StateMachine.GetInstance().ChangeState("play");
     }
 
-    public override void Exit()
+    public void Exit()
     {
         
     }

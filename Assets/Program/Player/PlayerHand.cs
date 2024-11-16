@@ -8,6 +8,11 @@ public class PlayerHand : MonoBehaviour
 {
     //手札のcard情報
     private List<Card> _cards = new();
+    
+    public List<Card> GetAllCards()
+    {
+        return _cards;
+    }
 
     //Cardを登録
     public async UniTask AddCard(Card card)
@@ -26,7 +31,7 @@ public class PlayerHand : MonoBehaviour
     }
 
     //手札をソートする
-    public void ResetPosition()
+    private void ResetPosition()
     {
         for (int i = 0; i < _cards.Count; i++)
         {

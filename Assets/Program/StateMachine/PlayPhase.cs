@@ -1,14 +1,15 @@
 using Cysharp.Threading.Tasks;
 
-public class PlayPhase : State
+public class PlayPhase : IState
 {
-    public override async UniTask Enter()
+    public UniTask Enter()
     {
-        
+        InGameLogic.I.SetCardsDraggable(true);
+        return UniTask.CompletedTask;
     }
     
-    public override void Exit()
+    public void Exit()
     {
-        
+        InGameLogic.I.SetCardsDraggable(false);
     }
 }

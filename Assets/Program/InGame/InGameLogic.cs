@@ -1,5 +1,4 @@
 using System.Linq;
-using UniRx;
 using UnityEngine;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
@@ -11,15 +10,12 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     [SerializeField] private CardGenerator _cardGenerator;
     [SerializeField, Header("Cardを配る場所")] private PlayerHand _playerHand;
     [SerializeField, Header("置きたい場所")] private GameObject _targetTransform;
-   [SerializeField, Header("全てのCardの数")] private int _cardDataList;
-   
-   private int _turnCount = 0;
+    [SerializeField, Header("全てのCardの数")] private int _cardDataList;
+
+    private int _turnCount;
 
     private Player _player;
     private Enemy _enemy;
-   
-    private readonly ReactiveProperty<InGamePhase> _currentPhase = new();
-    public IReactiveProperty<InGamePhase> CurrentPhase => _currentPhase;
 
     private void Start()
     {
@@ -40,7 +36,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         _inGameView.ChangeHPBar(_player.GetHP(), 0);
         _inGameView.ChangeHPBar(_enemy.GetCurrentHp(), 1);
     }
-    
+
     public async UniTask GameMainSetUp()
     {
         await StartCard();
@@ -52,19 +48,21 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         _playerHand.ResetCard();
         await AddCardToHand();
     }
-    
+
     private async UniTask AddCardToHand()
     {
-        if (_cardDataList < 3) 
+        if (_cardDataList < 3)
         {
             Debug.LogError("カードデータの数が足りません。");
             return;
         }
-        int[] cardIDs = Enumerable.Range(0, _cardDataList).OrderBy(_ => Random.value).Take(3).ToArray();
+
+        int[] cardIDs = Enumerable.Range(1, _cardDataList).OrderBy(_ => Random.value).Take(3).ToArray();
 
         for (int i = 0; i < 3; i++)
         {
             Card createCard = _cardGenerator.SpawnCard(cardIDs[i]);
+            createCard.OnBattleAction += async () => await PlayCard(createCard);
             await _playerHand.AddCard(createCard);
         }
     }
@@ -78,15 +76,15 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
     {
         await _inGameView.ShowGameEndPanel(panelText);
     }
-    
+
     public async UniTask PlayCard(Card card)
     {
         card.GetPanel().alpha = 0;
+        await StateMachine.GetInstance().ChangeState("battle");
         await card.transform.DOMove(_targetTransform.transform.position, 0.1f);
         await _inGameView.ShowEffect(card.GetSummonEffectName(), _targetTransform.transform.position);
         card.GetPanel().alpha = 1;
         _playerHand.RemoveCard(card);
-        await StateMachine.GetInstance().ChangeState("battle");
         await CardBattle(card);
     }
 
@@ -103,13 +101,13 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         {
             await PerformEnemyAttack(card);
         }
-        
+
         if (_enemy.GetCurrentHp() <= 0 || _player.GetHP() <= 0)
         {
             await StateMachine.GetInstance().ChangeState("gameEnd");
             return;
         }
-        
+
         Destroy(card.gameObject);
         await StateMachine.GetInstance().ChangeState("turnEnd");
     }
@@ -130,7 +128,7 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         await _inGameView.ShowCutInAnimation(card.GetIcon(), "Player");
         _enemy.SetCurrentHp(card.GetCardPower());
         UpdateHPBars();
-        await _inGameView.ShowEffect(card.GetAttackEffectName(), card.transform.position,_enemy.transform.position);
+        await _inGameView.ShowEffect(card.GetAttackEffectName(), card.transform.position, _enemy.transform.position);
     }
 
     private async UniTask PerformEnemyAttack(Card card)
@@ -138,6 +136,14 @@ public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
         await _inGameView.ShowCutInAnimation(_enemy.GetIcon(), "Enemy");
         _player.ChangeHealth(1);
         UpdateHPBars();
-        await _inGameView.ShowEffect(_enemy.GetEffectName(), _enemy.transform.position,card.transform.position);
+        await _inGameView.ShowEffect(_enemy.GetEffectName(), _enemy.transform.position, card.transform.position);
+    }
+
+    public void SetCardsDraggable(bool draggable)
+    {
+        foreach (var card in _playerHand.GetAllCards())
+        {
+            card.IsDragging(draggable);
+        }
     }
 }
