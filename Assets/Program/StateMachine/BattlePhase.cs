@@ -2,9 +2,9 @@ using Cysharp.Threading.Tasks;
 
 public class BattlePhase : IState
 {
-    public async UniTask Enter()
+    public UniTask Enter()
     {
-        
+        return UniTask.CompletedTask;
     }
 
     public async void Exit()
