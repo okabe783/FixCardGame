@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEditor.Timeline.Actions;
 using UnityEngine.SceneManagement;
 
 /// <summary>Menu画面にシーンを移動するボタンを追加</summary>
@@ -26,6 +27,12 @@ public static class SceneNavigation
         OpenScene(2);
     }
     
+    [MenuItem("Scene/StageSelect")]
+    public static void Scene03()
+    {
+        EditorSceneManager.SaveOpenScenes();
+        OpenScene(3);
+    }
     
     private static void OpenScene(int sceneIndex)
     {

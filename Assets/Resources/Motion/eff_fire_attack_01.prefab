@@ -4875,7 +4875,7 @@ GameObject:
   - component: {fileID: 2825419559474399064}
   - component: {fileID: 6688247716075322451}
   m_Layer: 0
-  m_Name: eff_attack_01
+  m_Name: eff_fire_attack_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

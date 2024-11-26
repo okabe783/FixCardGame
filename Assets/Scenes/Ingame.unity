@@ -900,6 +900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cardPrefab: {fileID: 854597874622652960, guid: b929f8401852d1348a419c8d05cdc50c, type: 3}
   _startCardPosition: {fileID: 1945440047}
+  _cardCount: 41
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,7 +1517,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_Sprite: {fileID: -988917675, guid: e15a90282dae3254ebfde6e667279b73, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 33.9, y: 48.024223}
@@ -7050,7 +7051,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5036399949201641258, guid: ec93fe40277bd0741bd58f1a160f42dc, type: 3}
       propertyPath: _enemyDataList
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6931514649004267506, guid: ec93fe40277bd0741bd58f1a160f42dc, type: 3}
       propertyPath: m_Name

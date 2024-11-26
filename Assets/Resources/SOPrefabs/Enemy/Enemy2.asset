@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e009ce1fdb814c4da062f2caf08a21f, type: 3}
+  m_Name: Enemy2
+  m_EditorClassIdentifier: 
+  EnemyID: 2
+  ActiveSkillTurn: 2
+  Hp: 10
+  Sprite: {fileID: 21300000, guid: 39fc31c403537426b8710d24a674f0fd, type: 3}
+  EffectName: eff_sword_attack_01
+  powerValue: 2
+  HealValue: 2
+  _commandDatabase:
+    _skillDataList: []
+  references:
+    version: 2
+    RefIds: []

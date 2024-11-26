@@ -29,21 +29,26 @@ public class InGameView : MonoBehaviour
         await UniTask.Delay(2000);
     }
 
-    public async UniTask ShowEffect(string effectName,Vector2 startPosition)
+    public async UniTask ShowEffect(string effectName,Vector2 startPosition,bool isEnemyAttack)
     {
-        await ShowEffect(effectName, startPosition, startPosition);
+        await ShowEffect(effectName, startPosition, startPosition,isEnemyAttack);
     }
     
-    public async UniTask ShowEffect(string effectName,Vector2 startPosition,Vector2 targetPosition)
+    public async UniTask ShowEffect(string effectName,Vector2 startPosition,Vector2 targetPosition,bool isEnemyAttack)
     {
+        // Effectをロードする
         EffectSettings effectPrefab = Resources.Load<EffectSettings>("Motion/" + effectName);
+        
         if (effectPrefab == null)
         {
             Debug.LogError("Effectが見つかりません");
             return;
         }
         
-        EffectSettings effectInstance = Instantiate(effectPrefab,startPosition,Quaternion.identity);
+        Quaternion rotation = Quaternion.Euler(isEnemyAttack ? 180 : 0, 0, 0); 
+
+        // Effectを生成
+        EffectSettings effectInstance = Instantiate(effectPrefab,startPosition,effectPrefab.transform.rotation * rotation);
 
         // ヒットエフェクトが指定されていれば生成
         if (!string.IsNullOrEmpty(effectPrefab.OnHitEffect))
@@ -52,7 +57,7 @@ public class InGameView : MonoBehaviour
             EffectSettings hitEffectPrefab = Resources.Load<EffectSettings>("Motion/" + effectPrefab.OnHitEffect);
             if (hitEffectPrefab != null)
             {
-                EffectSettings hitEffectInstance = Instantiate(hitEffectPrefab, targetPosition, Quaternion.identity);
+                EffectSettings hitEffectInstance = Instantiate(hitEffectPrefab, targetPosition, hitEffectPrefab.transform.rotation);
                 await hitEffectInstance.SetParticle(hitEffectInstance);
             }
             else

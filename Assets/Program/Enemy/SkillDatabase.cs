@@ -6,17 +6,19 @@ using UnityEngine;
 [Serializable]
 public class SkillDatabase
 {
-    [SerializeField,SerializeReference,SubclassSelector,Header("敵のスキル")]
-    private List<IAbility> _abilities = new();
-
+    [SerializeField]
+    private List<SkillData> _skillDataList = new();
+    
+    public List<SkillData> SkillDataList => _skillDataList;
+    
     // Skillの発動処理
     public async UniTask ActiveSkill(Enemy enemy)
     {
-        var task = new List<UniTask>();
+        List<UniTask> task = new();
         {
-            foreach (var ability in _abilities)
+            foreach (var skillData  in _skillDataList)
             {
-                task.Add(ability.SetAbility(enemy));
+                task.Add(skillData.Ability.SetAbility(enemy));
             }
         }
 

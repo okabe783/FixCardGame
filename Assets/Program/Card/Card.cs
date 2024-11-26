@@ -16,6 +16,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
     
     private int _power;
     private int _id;
+    
     private const float _threshold = 200f;
     private string _attackEffectName;
     private string _summonEffectName;
@@ -41,7 +42,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
 
     public Image GetIcon() => _icon;
     
-    #endregion 
+    #endregion
 
     private void Start()
     {
@@ -68,7 +69,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         int colorIndex = 0;
 
         // 各属性Panelに対して属性をチェックし、色を設定
-        foreach (var attributeColor in _attributeColors)
+        foreach (KeyValuePair<EnemyAttribute, Color> attributeColor in _attributeColors)
         {
             if (_skill.HasFlag(attributeColor.Key) && colorIndex < _colorPanelObject.Length)
             {
@@ -91,16 +92,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         }
     }
 
-    public void SetCardData(int cardID)
+    public void SetCardData(CardSO cardData)
     {
-        CardSO cardData = Resources.Load<CardSO>($"SOPrefabs/Card/Card{cardID}");
-        if (cardData == null)
-        {
-            Debug.Log(cardID); 
-            Debug.LogError($"CardDataが存在しません");
-            return;
-        }
-        
         _icon.sprite = cardData.Icon;
         _descriptionText.text = cardData.Description;
         _id = cardData.ID;
@@ -109,8 +102,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDrag
         _summonEffectName = cardData.SummonEffectName;
 
         // 属性をCardSkillから取得して保持
-        _skill = _id < CardSkill.AllAttributes.Count ? 
-         CardSkill.AllAttributes[_id - 1] : throw new System.ArgumentOutOfRangeException(nameof(cardID));
+        _skill = _id <= CardAttribute.AllAttributes.Count ? 
+         CardAttribute.AllAttributes[_id - 1] : throw new ArgumentOutOfRangeException(nameof(cardData));
     }
 
     public void OnPointerDown(PointerEventData eventData)

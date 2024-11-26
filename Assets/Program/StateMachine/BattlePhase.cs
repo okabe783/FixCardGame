@@ -2,9 +2,17 @@ using Cysharp.Threading.Tasks;
 
 public class BattlePhase : IState
 {
-    public UniTask Enter()
+    private Card _currentCard;
+
+    public void SetCard(Card card)
     {
-        return UniTask.CompletedTask;
+        _currentCard = card;
+    }
+    
+    public async UniTask Enter()
+    {
+        await InGameLogic.I.PlayCard(_currentCard);
+        await InGameLogic.I.CardBattle(_currentCard);
     }
 
     public async void Exit()

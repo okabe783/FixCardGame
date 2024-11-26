@@ -42,6 +42,7 @@ public class EffectSettings : MonoBehaviour
         Destroy(effectInstance.gameObject);
     }
     
+    // Effectの移動
     public async UniTask MoveEffectToTarget(EffectSettings effect,Vector2 targetPosition)
     {
         Vector3 startPosition = effect.transform.position;

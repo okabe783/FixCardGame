@@ -2,13 +2,14 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-public class CardSkill
+// Cardの属性を管理する
+public class CardAttribute
 {
     private static List<EnemyAttribute> _allAttributes = new();
     
     public static List<EnemyAttribute> AllAttributes => _allAttributes;
 
-    static CardSkill()
+    static CardAttribute()
     {
         SetActiveSkillList();
     }
@@ -16,10 +17,10 @@ public class CardSkill
     private static void SetActiveSkillList()
     {
         // 属性を配列に格納
-        var enemyAttributes = Enum.GetValues(typeof(EnemyAttribute)).Cast<EnemyAttribute>().ToList();
+        List<EnemyAttribute> enemyAttributes = Enum.GetValues(typeof(EnemyAttribute)).Cast<EnemyAttribute>().ToList();
 
         // 1属性の組合せ
-        foreach (var attributes in enemyAttributes)
+        foreach (EnemyAttribute attributes in enemyAttributes)
         {
             _allAttributes.Add(attributes);
         }

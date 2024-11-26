@@ -8,11 +8,8 @@ public class PlayerHand : MonoBehaviour
 {
     //手札のcard情報
     private List<Card> _cards = new();
-    
-    public List<Card> GetAllCards()
-    {
-        return _cards;
-    }
+
+    public List<Card> GetAllCards() => _cards;
 
     //Cardを登録
     public async UniTask AddCard(Card card)

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc9f8b9050ba7774e8abbe74bc4c84b0, type: 3}
   m_Name: Card13
   m_EditorClassIdentifier: 
-  AttackEffectName: eff_attack_01
+  AttackEffectName: eff_fire_attack_01
   SummonEffectName: eff_summon_01
   CardPower: 2
   ID: 13
   Icon: {fileID: 21300000, guid: 3bbcfd6472d2cd8439ce24a6bb6592b6, type: 3}
-  Description: "\u3046\u3046\u3046"
+  Description: 

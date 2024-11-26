@@ -5,8 +5,8 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     [SerializeField] private Enemy _enemy;
-    private IState _currentState; 
-    private readonly Dictionary<string, IState> _states = new(); 
+    private IState _currentState;
+    private readonly Dictionary<string, IState> _states = new();
     private static StateMachine _stateMachine;
 
     public static StateMachine GetInstance()
@@ -26,40 +26,39 @@ public class StateMachine : MonoBehaviour
         AddState("play", new PlayPhase());
         AddState("battle", new BattlePhase());
         AddState("turnEnd", new TurnEndPhase());
-        AddState("gameEnd",new GameEnd(_enemy));
+        AddState("gameEnd", new GameEnd(_enemy));
     }
 
     private async UniTask Start()
     {
         await ChangeState("mulligan");
     }
-    
+
     // 状態を登録
     private void AddState(string key, IState state)
     {
         _states.TryAdd(key, state);
     }
-    
-    public async UniTask ChangeState(string key)
+
+    public async UniTask ChangeState(string key, Card currentCard = null)
     {
         if (_currentState != null)
         {
             _currentState.Exit();
         }
 
-        if (_states.TryGetValue(key, out var state))
+        if (_states.TryGetValue(key, out IState state))
         {
+            // バトルstateだった場合カードをセット
+            if (state is BattlePhase battlePhase && currentCard != null)
+            {
+                battlePhase.SetCard(currentCard);
+            }
+
             _currentState = state;
             await _currentState.Enter();
         }
         else
-        {
-            Debug.LogError("State not found");
-        }
-    }
-
-    public IState GetCurrentState()
-    {
-        return _currentState;
+            Debug.LogError("Stateが存在しません");
     }
 }
