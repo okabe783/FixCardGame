@@ -4,7 +4,7 @@ using DG.Tweening;
 using Cysharp.Threading.Tasks;
 
 //　InGameの機構を管理する
-public class InGameLogic : SingletonMonoBehaviour<InGameLogic>
+public class InGameSystem : SingletonMonoBehaviour<InGameSystem>
 {
     [SerializeField] private InGameView _inGameView;
     [SerializeField] private CardGenerator _cardGenerator;

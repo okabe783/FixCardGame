@@ -11,13 +11,13 @@ public class BattlePhase : IState
     
     public async UniTask Enter()
     {
-        await InGameLogic.I.PlayCard(_currentCard);
-        await InGameLogic.I.CardBattle(_currentCard);
+        await InGameSystem.I.PlayCard(_currentCard);
+        await InGameSystem.I.CardBattle(_currentCard);
     }
 
     public async void Exit()
     {
         // 敵のスキルを発動する
-        await InGameLogic.I.ActiveEnemySkill();
+        await InGameSystem.I.ActiveEnemySkill();
     }
 }

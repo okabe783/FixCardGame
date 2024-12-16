@@ -10,7 +10,7 @@ public class GameEnd : IState
     }
     public async UniTask Enter()
     {
-        await InGameLogic.I.ShowGameEndPanel(_enemy.GetCurrentHp() <= 0 ? "WIN!" : "Lose!");
+        await InGameSystem.I.ShowGameEndPanel(_enemy.GetCurrentHp() <= 0 ? "WIN!" : "Lose!");
         Exit();
     }
 
